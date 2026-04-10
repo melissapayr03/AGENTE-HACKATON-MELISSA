@@ -56,17 +56,7 @@ html { scroll-behavior: smooth; }
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
+/* CUERPO */
 
 .main-body {
   background-image:
@@ -97,11 +87,14 @@ html { scroll-behavior: smooth; }
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
-/* BODY */
+
+
+/* ENCABEZADO */
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  margin-bottom: -30px;
   padding: 0 1.5rem;
 }
 
@@ -124,8 +117,6 @@ nav {
 }
 
 
-
-/* ENCABEZADO */
 
 .logo {
   display: flex;
@@ -432,18 +423,21 @@ nav {
   padding: 3.5rem 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  background: rgba(15,23,42,0.3);
+  background: rgba(15,23,42,0.3); 
+  margin-top: 80px;
 }
 
+
 .datos-aprox {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .dato-item {
   border-left: 2px solid rgba(59,130,246,0.3);
   padding-left: 1.5rem;
+  margin-top: -30px;
   transition: border-color 0.2s;
 }
 
@@ -451,14 +445,14 @@ nav {
 
 .dato-value {
   font-family: 'Courier New', monospace;
-  font-size: 2.25rem;
+  font-size: 45px;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
 
 .dato-label {
-  font-size: 0.65rem;
+  font-size: 16px;
   color: var(--text-muted);
   font-family: 'Courier New', monospace;
   letter-spacing: 0.1em;
@@ -472,15 +466,16 @@ nav {
 .section { padding: 7rem 0; }
 .section-sm { padding: 4rem 0; }
 
+
 .costo-desp-texto {
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 800;
   margin-bottom: 1.25rem;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
 }
 
 .subtexto-costo-desp {
-  font-size: 1.15rem;
+  font-size: 20px;
   color: var(--text-muted);
   font-weight: 300;
   max-width: 640px;
@@ -496,6 +491,7 @@ nav {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-top: 3.5rem;
+  margin-bottom: -60px;
 }
 
 .contenedor-cuadro {
@@ -510,10 +506,9 @@ nav {
 .contenedor-cuadro:hover { background: rgba(15,23,42,0.9); }
 
 .contenedor-cuadro::before {
-  content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 3px;
+  height: 2px;
 }
 
 .card-red::before   { background: var(--red); }
@@ -535,10 +530,10 @@ nav {
 
 .card-title {
   font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  margin-bottom: 1rem;
+  letter-spacing: 3.5px;
+  margin-bottom: 12px;
   text-transform: uppercase;
 }
 
@@ -551,7 +546,10 @@ nav {
 
 
 /* Sección: OPTIMIZA EN TIEMPO REAL */
-#implementacion { background-color: var(--bg-deep); }
+#implementacion { 
+  background-color: var(--bg-deep); 
+  margin-top: -50px;
+}
 
 .impl-contenedor {
   display: flex;
@@ -568,12 +566,19 @@ nav {
   font-size: clamp(2rem, 3.5vw, 2.75rem);
   font-weight: 800;
   margin-bottom: 1rem;
+  font-size: 60px;
+  width: 670px;
+
 }
 
-.impl-heading span { color: var(--blue); }
+.impl-heading span { 
+  color: var(--blue);
+  font-size: 75px; 
+  letter-spacing: 2px;
+}
 
 .impl-subtexto {
-  font-size: 1.1rem;
+  font-size: 19px;
   color: var(--text-muted);
   font-weight: 300;
   margin-bottom: 3rem;
@@ -624,7 +629,10 @@ nav {
 
 .paso-indv:hover .paso-indv-line { background: rgba(59,130,246,0.4); }
 
-.paso-indv-body { padding-bottom: 2.5rem; }
+.paso-indv-body { 
+  padding-bottom: 2.5rem;
+  
+}
 
 .paso-indv-title {
   font-family: 'Courier New', monospace;
@@ -872,6 +880,10 @@ body::before {
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
+}
+
+.font-mono {
+  font-family: 'Courier New', Courier, monospace;
 }
 
 :root {

@@ -15,9 +15,7 @@
 
 
 <body>
-
     <!-- ENCABEZADO -->
-
     <nav>
         <div class="container">
             <div class="encabezado">
@@ -27,7 +25,7 @@
                 
                 <div class="links">
                     <a href="#home">HOME</a>
-                    <a href="#contact">CONTACT</a>
+                    <a href="#contactofinal">CONTACT</a>
                     <a href="#impact">IMPACT</a>
                 </div>
                 
@@ -36,8 +34,8 @@
                         <span class="boton-sistema"></span>
                         SISTEMA ACTIVO
                     </div>
-                    <a class="boton-acceder" href="....." target="_blank">
-                        ACCEDER AL MONITOREO
+                    <a class="boton-acceder" href="index_secundario.html" target="_blank">
+                        IR AL MONITOREO
                     </a>
                 </div>
             </div>
@@ -67,10 +65,10 @@
                     </p>
                     
                     <div class="boton-hero">
-                        <a class="boton-acceder boton-acceder-lg" href="........." target="_blank">
+                        <a class="boton-acceder boton-acceder-lg" href="index_secundario.html" target="_blank">
                             INICIAR MONITOREO
                         </a>
-                        <a class="boton-guia" href="#tecnologia">
+                        <a class="boton-guia" href="#implementacion">
                             VER GUÍA DE USO
                         </a>
                     </div>
@@ -190,6 +188,7 @@
                 </div>
                 
                 <div class="cards-cuadro">
+
                     <div class="contenedor-cuadro card-red card-border-red reveal">
                         <!-- diseño de icono -->
                         <svg class="problem-icon icon-red" viewBox="0 0 24 24" width="60" height="60">
@@ -244,7 +243,7 @@
                         <div class="pasos">
 
                             <div class="paso-indv">
-                                <div class="paso-indv">
+                                <div class="paso-indv-col">
                                     <div class="paso-indv-circle">01</div>
                                     <div class="paso-indv-line"></div>
                                 </div>
@@ -374,7 +373,7 @@
                             </li>
                                 
                             <li>
-                                <a href="#contacto">
+                                <a href="#contactofinal">
                                     <svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                     CONTACTO
                                 </a>
@@ -413,12 +412,14 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                }
-            });
-        }, { 
-            threshold: 0.12 });document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+                    }});
+                    }, { 
+                        threshold: 0.12 
+                    }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         </script>
 
-    </body>
+    </section>
+
+</body>
 
 </html>

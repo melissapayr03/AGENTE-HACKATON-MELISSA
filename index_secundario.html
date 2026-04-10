@@ -5,315 +5,440 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoAnalyzerX IA</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="secundario.css">
 
+    <!--Fuentes importadas de Google APIs-->
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
-
-        .dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; max-width: 1200px; margin: 0 auto; }
-        @media (max-width: 800px) { .dashboard { grid-template-columns: 1fr; } }
-        .panel { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);  margin-bottom: 20px;}
-        .header { text-align: center; margin-bottom: 20px; }
-        h1 { color: #1a237e; margin-bottom: 5px; font-size: 1.8rem;}
-        h2 { margin-top: 0; color: #1a237e; font-size: 1.1rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; }
-        .dashboard-micro { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 20px; max-width: 1300px; margin: 0 auto 30px auto; }
-       
-        /* Formularios y Botones */
-        .form-row { display: flex; gap: 10px; margin-bottom: 12px;}
-        .form-group { flex: 1; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85rem; }
-        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { background-color: #1a237e; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: background 0.3s; margin-top: 10px;}
-        button:hover { background-color: #283593; }
-
-        .btn-ag { background-color: #00695c; font-size: 1.1rem; padding: 15px; }
-        .btn-ag:hover { background-color: #004d40; }
-        .btn-principal { background-color: #1a237e; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; margin-top: 10px;}
-        .btn-principal:hover { background-color: #283593; }
-
-        /* Semáforos */
-        .panel-semaforos { display: flex; justify-content: space-around; margin-top: 15px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;}
-        .indicador { display: flex; flex-direction: column; align-items: center; }
-        .semaforo-mini { width: 45px; height: 45px; border-radius: 50%; background-color: #bdc3c7; border: 3px solid #7f8c8d; box-shadow: inset 0 0 8px rgba(0,0,0,0.3); margin-bottom: 8px; }
-        .etiqueta-comp { font-size: 0.85rem; font-weight: bold; color: #2c3e50; }
-        .valor-comp { font-size: 1.1rem; font-weight: 900; color: #34495e; }
-        .valor-comp { font-size: 1rem; font-weight: 900; color: #34495e; }
-        .agente-box { flex-grow: 1; background: #e8eaf6; padding: 15px; border-left: 4px solid #3f51b5; border-radius: 4px; margin-top: 15px; line-height: 1.5; }
-
-
-        /* Panel Vibración (Nuevo) */
-        .vibra-panel { background: #2c3e50; color: white; border-radius: 8px; padding: 12px; margin-top: 15px; text-align: center;}
-        .vibra-panel h3 { margin: 0 0 10px 0; font-size: 0.95rem; color: #ecf0f1; border-bottom: 1px solid #34495e; padding-bottom: 5px;}
-        .vibra-stats { display: flex; justify-content: space-around; }
-        .v-stat { display: flex; flex-direction: column; }
-        .v-lbl { font-size: 0.75rem; color: #bdc3c7; text-transform: uppercase; letter-spacing: 1px;}
-        .v-val { font-size: 1.3rem; font-weight: bold; font-family: monospace; }
-        .alerta-vibra { color: #e74c3c; animation: parpadeo 1s infinite; font-weight: bold; display: none; margin-top: 8px; font-size: 0.85rem;}
-        @keyframes parpadeo { 50% { opacity: 0.5; } }
-
-        /* Contraste Modelos */
-        .modelos-grid { display: flex; gap: 10px; margin-top: 15px; }
-        .caja-modelo { flex: 1; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #ccc; background: #fff;}
-        .caja-modelo h3 { margin: 0 0 5px 0; font-size: 0.85rem; color: #555; }
-        .caja-modelo span { font-size: 1.5rem; font-weight: bold; }
-
-        /* Chatbot */
-        .chat-container { display: flex; flex-direction: column; height: 420px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;}
-        .chat-history { flex-grow: 1; padding: 15px; background: #fafafa; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .mensaje { padding: 10px 15px; border-radius: 12px; max-width: 90%; line-height: 1.4; font-size: 0.9rem; }
-        .msg-usuario { background: #1a237e; color: white; align-self: flex-end; border-bottom-right-radius: 2px;}
-        .msg-ia { background: #e8eaf6; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; border-left: 4px solid #3f51b5;}
-        .chat-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #e0e0e0; }
-        .chat-input-area input { flex-grow: 1; border: 1px solid #ccc; padding: 10px; border-radius: 20px; outline: none; }
-        .chat-input-area button { padding: 10px 15px; border-radius: 20px; margin-left: 10px; background: #1a237e; color:white; border:none; cursor:pointer;}
-
-        /* Flota / AG */
-        .flota-container { max-width: 1300px; margin: 0 auto; }
-        .stats-flota { display: flex; justify-content: space-around; background: #2c3e50; color: white; padding: 15px; border-radius: 8px; margin: 15px 0; font-weight: bold;}
-        .grid-camiones { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; max-height: 400px; overflow-y: auto; padding: 10px; background: white; border-radius: 8px;}
-        .camion-card { padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .camion-card span { display: block; font-size: 0.75rem; font-weight: normal; margin-top: 5px; opacity: 0.9;}
-        .camion-card:hover { transform: scale(1.05); }
-        
-        .estado-verde { background-color: #2ecc71; border: 2px solid #27ae60; }
-        .estado-amarillo { background-color: #f1c40f; border: 2px solid #f39c12; color: #333; }
-        .estado-rojo { background-color: #e74c3c; border: 2px solid #c0392b; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
     </style>
 </head>
 
 
-
-
-
-
-
+<!-- CUERPO ENTERO DE LA PÁGINA -->
 
 <body>
 
-<div class="header">
-    <h1>INTEGRADO</h1>
-    <p>Algoritmos B50 | Regresión Histórica | Análisis de Vibración (FFT/Curtosis)</p>
-</div>
-
-
-<div class="dashboard-micro">
-    <div class="panel">
-        <h2>1. Parámetros de la Unidad</h2>
-        <div class="form-row">
-            <div class="form-group"><label>Km Actuales:</label><input type="number" id="km_actuales" value="750000"></div>
-            <div class="form-group"><label>Año Modelo:</label><input type="number" id="anio_modelo" value="2016"></div>
-        </div>
-        <div class="form-row">
-            <div class="form-group"><label>Reparaciones:</label><input type="number" id="reparaciones" value="4"></div>
-            <div class="form-group"><label>Ruta Actual:</label><select id="ruta"><option value="Plana">Plana</option><option value="Mixta">Mixta</option><option value="Montañosa" selected>Sierra</option></select></div>
-        </div>
-        <div class="form-row">
-            <div class="form-group"><label>Carga Promedio:</label><select id="carga"><option value="Ligera">Ligera</option><option value="Media">Media</option><option value="Pesada" selected>Pesada</option></select></div>
-        </div>
-        <button class="btn-principal" onclick="ejecutarGemelo()">2. Ejecutar Gemelo Digital</button>
-        
-        <div class="vibra-panel">
-            <h3>Telemetría Transmisión (Sensor MEMS)</h3>
-            <div class="vibra-stats">
-                <div class="v-stat"><span class="v-lbl">Energía (RMS)</span><span class="v-val" id="val_rms">0.00 G</span></div>
-                <div class="v-stat"><span class="v-lbl">Curtosis (K)</span><span class="v-val" id="val_kurt">0.00</span></div>
-            </div>
-            <div id="alerta_kurtosis" class="alerta-vibra">⚠️ ¡ALERTA! Curtosis alta: Posible fractura en rodamiento</div>
-        </div>
-
-        
-    </div>
-
-    <div class="panel">
-        <h2>3. Diagnóstico de Salud (12 Meses)</h2>
-        <div class="panel-semaforos">
-            <div class="indicador"><div id="sem_motor" class="semaforo-mini"></div><span class="etiqueta-comp">Motor</span><span id="val_motor" class="valor-comp">--%</span></div>
-            <div class="indicador"><div id="sem_trans" class="semaforo-mini"></div><span class="etiqueta-comp">Trans.</span><span id="val_trans" class="valor-comp">--%</span></div>
-            <div class="indicador"><div id="sem_frenos" class="semaforo-mini"></div><span class="etiqueta-comp">Frenos</span><span id="val_frenos" class="valor-comp">--%</span></div>
-        </div>
-        <div class="modelos-grid">
-            <div class="caja-modelo">
-                <h3>Modelo Físico B50</h3>
-                <span id="res_matematico" style="color:#2980b9;">--%</span>
-            </div>
-            <div class="caja-modelo">
-                <h3>Regresión Estadística</h3>
-                <span id="res_estadistico" style="color:#8e44ad;">--%</span>
+    <!-- ENCABEZADO -->
+    <header class="header-nav">
+        <div class="top-encabezado">
+            <div class="encabezado">
+                <a href="index.html" class="logo">
+                    <span class="logo-text">AUTO<span>ANALYZER</span> X</span>
+                </a>
+                
+                <div class="links">
+                    <a href="index.html">HOME</a>
+                    <a href="index.html">CONTACT</a>
+                    <a href="index.html">IMPACT</a>
+                </div>
+                
+                <div class="sistema-acceder">
+                    <div class="sistema-activo">
+                        <span class="boton-sistema"></span>
+                        SISTEMA ACTIVO
+                    </div>
+                    <a class="boton-acceder" href="index_secundario.html" target="_blank">
+                        IR AL MONITOREO
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div class="panel">
-        <h2>4. Agente IA (Dictamen de Ensamble)</h2>
-        <div class="chat-container">
-            <div class="chat-history" id="chat_history">
-                <div class="mensaje msg-ia"><b>🤖 IA Traxión:</b> Sistemas en línea. Evaluaremos Salud Matemática, Regresión Histórica y Curtosis de Vibración para evitar fallas catastróficas.</div>
+
+
+    <!-- BODY PRINCIPAL -->
+    <section id="hero" class="main-body">
+
+        <div class="fleet-dashboard">
+
+            <!-- TARJETAS DE RESUMEN KPI -->
+            <div class="summary-bar">
+                <div class="summary-card blue">
+                    <div class="label">Total Flota</div>
+                    <div class="value blue" id="stat-total">0</div>
+                    <div class="sub">Unidades registradas</div>
+                </div>
+                <div class="summary-card green">
+                    <div class="label">Operativas</div>
+                    <div class="value green" id="stat-optimal">0</div>
+                    <div class="sub" id="stat-optimal-pct">0% de la flota</div>
+                </div>
+                <div class="summary-card amber">
+                    <div class="label">En Alerta</div>
+                    <div class="value amber" id="stat-warning">0</div>
+                    <div class="sub">Requieren atención</div>
+                </div>
+                <div class="summary-card red">
+                    <div class="label">Críticas</div>
+                    <div class="value red" id="stat-critical">0</div>
+                    <div class="sub">Acción inmediata</div>
+                </div>
+                <div class="summary-card purple">
+                    <div class="label">Vel. Promedio</div>
+                    <div class="value purple" id="stat-speed">0</div>
+                    <div class="sub">km/h promedio</div>
+                </div>
             </div>
-            <div class="chat-input-area">
-                <input type="text" id="user_input" placeholder="Genera reporte y orden de trabajo...">
-                <button onclick="enviarMensajeIA()">Enviar</button>
+
+            <!-- BARRA DE BÚSQUEDA Y FILTROS -->
+            <div class="controls-bar">
+                <div class="search-box">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Buscar por ID, conductor, placa, ruta..." />
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active"       data-filter="all"      onclick="setFilter('all')">Todas</button>
+                    <button class="filter-btn"              data-filter="optimal"  onclick="setFilter('optimal')">Óptimas</button>
+                    <button class="filter-btn"              data-filter="warning"  onclick="setFilter('warning')">Alerta</button>
+                    <button class="filter-btn"              data-filter="critical" onclick="setFilter('critical')">Críticas</button>
+                </div>
             </div>
+
+            <div class="fleet-grid" id="fleet-grid"></div>
+
+            <div class="empty-state" id="empty-state" style="display:none">
+                <p style="font-size:1.1rem; margin-bottom:.5rem">No se encontraron unidades</p>
+                <p>Intenta con otro filtro o término de búsqueda</p>
+            </div>
+
+            <!-- BANDA INFERIOR DEL DASHBOARD -->
+            <div class="fleet-footer" id="footer-sync">
+                Flota sincronizada | TRAXION Fleet Control v2.0
+            </div>
+
         </div>
-    </div>
-
-</div>
 
 
+        <!-- FOOTER -->
+        <footer class="footer-class">
+            <div>
+                <div class="footer-grid">
 
+                    <div>
+                        <div class="footer-brand-text">
+                            <svg width="22" height="22" viewBox="0 0 24 24" color="var(--blue)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            AUTO<span>ANALYZER </span>X 
+                        </div>
+                        
+                        <p class="footer-brand-desc">
+                            Agente con IA experta en mantenimiento predictivo para flotas.
+                        </p>  
+                    </div>
 
-<div class="dashboard">
-    
-    <div class="panel">
-        <h2>Proyección de Degradación</h2>
-        <canvas id="graficaDesgaste" height="110"></canvas>
-        <div class="agente-box" id="agente_mensaje"><i>Analizando unidad...</i></div>
-    </div>
-</div>
+                    <div>
+                        <div class="footer-col-title">
+                            Navegación
+                        </div>
 
+                        <ul class="footer-links">
+                            <li>
+                                <a href="index.html">
+                                    <svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    HOME
+                                </a>
+                            </li>
+                                
+                            <li>
+                                <a href="index.html">
+                                    <svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    IMPACT
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="index.html">
+                                    <svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    COSTO DEL "DESPUÉS"
+                                </a>
+                            </li>
 
-<div class="flota-container panel">
-    <h2 style="color: #00695c;">Algoritmo Genético: Asignación de Flota Inteligente (Knapsack Problem)</h2>
-    <p>Simula la evaluación de 100 unidades en tiempo real. El algoritmo maximiza la disponibilidad priorizando unidades sanas (Verdes) a rutas exigentes, retiene preventivamente las unidades en riesgo medio (Amarillas) y bloquea unidades críticas (Rojas).</p>
-    
-    <button class="btn-ag" onclick="ejecutarAlgoritmoGenetico()">🧬 Ejecutar Simulación de Flota (100 Unidades)</button>
+                            <li>
+                                <a href="index.html">
+                                    <svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    OPTIMIZA
+                                </a>
+                            </li>
+                                
+                            <li>
+                                <a href="#contactofinal">
+                                    <svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    CONTACTO
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                        
+                    <div>
+                        <div class="footer-col-title">Contacto y Legal</div>
+                        
+                        <ul class="footer-links" style="margin-bottom:1.5rem;">
+                            <li><a href="#">TÉRMINOS Y CONDICIONES</a></li>
+                            <li><a href="#">POLÍTICA DE PRIVACIDAD</a></li>
+                        </ul>
 
-    <div class="stats-flota" id="stats_flota" style="display: none;">
-        <div id="stat_verde">🟢 Aprobados (Ruta): 0</div>
-        <div id="stat_amarillo">🟡 Mantenimiento Preventivo: 0</div>
-        <div id="stat_rojo">🔴 Taller (Correctivo/Crítico): 0</div>
-    </div>
+                        <div class="footer-contact-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" color="var(--blue)"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            +52 983-165-9377
+                        </div>
+                        
+                        <div class="footer-email">autoanalyzerx@traxion.com</div>
+                    </div>
+                </div>
+                    
+                <div class="footer-bottom">
+                    <p class="footer-copy">Copyright &copy;2026 AutoAnalyzerX. All Rights Reserved.</p>
+                </div>
 
-    <div class="grid-camiones" id="grid_camiones">
-        </div>
-</div>
+            </div>
+        </footer>
 
+    </section>
 
-<script>
-    // ==========================================
-    // LÓGICA MÓDULO 1 (GEMELO INDIVIDUAL)
-    // ==========================================
-    let chartInstance = null;
+    <script>
 
-    function calcularModeloFisico(kmDiarios, ruta, carga) {
-        const vMotor = 1600000, vTrans = 800000, vFrenos = 350000;
-        let fMotor = 1.0, fTrans = 1.0, fFrenos = 1.0;
-        
-        if (ruta === "Montañosa") { fFrenos *= 1.8; fTrans *= 1.35; } else if (ruta === "Mixta") { fFrenos *= 1.25; fTrans *= 1.15; }
-        if (carga === "Pesada") { fMotor *= 1.35; fTrans *= 1.4; fFrenos *= 1.3; } else if (carga === "Media") { fMotor *= 1.1; fTrans *= 1.1; fFrenos *= 1.1; } else if (carga === "Ligera") { fMotor *= 0.85; fTrans *= 0.85; fFrenos *= 0.85; }
+        const MODELS  = [
+            "Kenworth W990","Peterbilt 579","Freightliner 122SD","Volvo VNL 860",
+            "International LT","Mack Anthem","Kenworth T680","Peterbilt 389",
+            "Volvo VNR","Freightliner Cascadia"
+        ];
+        const DRIVERS = [
+            "Carlos Martinez","Maria Lopez","Jose Garcia","Ana Rodriguez",
+            "Luis Hernandez","Sofia Torres","Pedro Ramirez","Carmen Flores",
+            "Miguel Sanchez","Elena Morales","Roberto Diaz","Patricia Vega",
+            "Fernando Castro","Laura Jimenez","David Mendez"
+        ];
+        const ROUTES  = [
+            "CDMX - Monterrey","Guadalajara - Tijuana","Monterrey - Laredo",
+            "Puebla - Veracruz","CDMX - Manzanillo","Hermosillo - Nogales",
+            "Saltillo - Laredo","Merida - Cancun","Toluca - Morelia","Pachuca - Tulancingo"
+        ];
 
-        let dMotor = [100], dTrans = [100], dFrenos = [100];
-        for (let i = 1; i <= 12; i++) {
-            dMotor.push(Math.max(0, 100 - (((kmDiarios * 30) * fMotor * i) / vMotor * 100)));
-            dTrans.push(Math.max(0, 100 - (((kmDiarios * 30) * fTrans * i) / vTrans * 100)));
-            dFrenos.push(Math.max(0, 100 - (((kmDiarios * 30) * fFrenos * i) / vFrenos * 100)));
+        function rand(min, max)    { return Math.random() * (max - min) + min; }
+        function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+        function pick(arr)         { return arr[Math.floor(Math.random() * arr.length)]; }
+
+        function plateRand() {
+            const L = "ABCDEFGHJKLMNPRSTUVWXYZ";
+            const l = () => L[randInt(0, L.length - 1)];
+            return `${l()}${l()}-${randInt(100,999)}-${l()}${l()}`;
         }
-        return { dMotor, dTrans, dFrenos };
-    }
 
-    function colorear(id, val) {
-        let div = document.getElementById(id);
-        if (val > 50) { div.style.background = "#2ecc71"; div.style.boxShadow = "0 0 15px #2ecc71"; } 
-        else if (val > 20) { div.style.background = "#f1c40f"; div.style.boxShadow = "0 0 15px #f1c40f"; } 
-        else { div.style.background = "#e74c3c"; div.style.boxShadow = "0 0 15px #e74c3c"; }
-    }
+        function sensorStatus(value, warn, crit, inv = false) {
+            if (inv) return value <= crit ? "critical" : value <= warn ? "warning" : "optimal";
+            return value >= crit ? "critical" : value >= warn ? "warning" : "optimal";
+        }
 
-    function proyectarDesgaste() {
-        const km = parseFloat(document.getElementById('km_diarios').value);
-        const ruta = document.getElementById('tipo_ruta').value;
-        const carga = document.getElementById('peso_carga').value;
-        const datos = calcularModeloFisico(km, ruta, carga);
+        function generateVehicle(index) {
+            const sensors = {
+                temperature:    parseFloat(rand(65, 125).toFixed(2)),
+                vibration:      parseFloat(rand(1,  9).toFixed(2)),
+                pressure:       parseFloat(rand(22, 45).toFixed(2)),
+                rpm:            parseFloat(rand(800, 2200).toFixed(2)),
+                fuelLevel:      parseFloat(rand(8,  100).toFixed(2)),
+                oilPressure:    parseFloat(rand(15, 80).toFixed(2)),
+                batteryVoltage: parseFloat(rand(11.2, 14.8).toFixed(2)),
+                tireCondition:  parseFloat(rand(20, 100).toFixed(2)),
+                brakeWear:      parseFloat(rand(20, 100).toFixed(2)),
+                engineLoad:     parseFloat(rand(30, 100).toFixed(2)),
+            };
 
-        if (chartInstance) chartInstance.destroy();
-        chartInstance = new Chart(document.getElementById('graficaDesgaste').getContext('2d'), {
-            type: 'line',
-            data: {
-                labels: ['Hoy', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12'],
-                datasets: [
-                    { label: 'Motor', data: datos.dMotor, borderColor: '#3498db', fill: false, tension: 0.2 },
-                    { label: 'Transmisión', data: datos.dTrans, borderColor: '#9b59b6', fill: false, tension: 0.2 },
-                    { label: 'Frenos', data: datos.dFrenos, borderColor: '#e74c3c', fill: false, tension: 0.2 }
-                ]
-            },
-            options: { responsive: true, scales: { y: { min: 0, max: 100 } } }
+            const diagnostics = [
+                { name:"Temperatura Motor",  value:sensors.temperature,    unit:"C",    status:sensorStatus(sensors.temperature,   95, 110),           min:60,  max:130  },
+                { name:"Vibración",          value:sensors.vibration,      unit:"mm/s", status:sensorStatus(sensors.vibration,     5,  7),              min:0,   max:10   },
+                { name:"Presión Neumáticos", value:sensors.pressure,       unit:"PSI",  status:sensorStatus(sensors.pressure,      28, 26,  true),      min:20,  max:50   },
+                { name:"RPM Motor",          value:sensors.rpm,            unit:"RPM",  status:sensorStatus(sensors.rpm,           1800, 2100),         min:0,   max:2500 },
+                { name:"Nivel Combustible",  value:sensors.fuelLevel,      unit:"%",    status:sensorStatus(sensors.fuelLevel,     25, 15,  true),      min:0,   max:100  },
+                { name:"Presión Aceite",     value:sensors.oilPressure,    unit:"PSI",  status:sensorStatus(sensors.oilPressure,   30, 22,  true),      min:0,   max:100  },
+                { name:"Voltaje Batería",    value:sensors.batteryVoltage, unit:"V",    status:sensorStatus(sensors.batteryVoltage,12.2,11.8,true),     min:10,  max:16   },
+                { name:"Estado Llantas",     value:sensors.tireCondition,  unit:"%",    status:sensorStatus(sensors.tireCondition, 50, 30,  true),      min:0,   max:100  },
+                { name:"Desgaste Frenos",    value:sensors.brakeWear,      unit:"%",    status:sensorStatus(sensors.brakeWear,     50, 30,  true),      min:0,   max:100  },
+                { name:"Carga Motor",        value:sensors.engineLoad,     unit:"%",    status:sensorStatus(sensors.engineLoad,    80, 90),             min:0,   max:100  },
+            ];
+
+            const status = diagnostics.some(d => d.status === "critical") ? "critical"
+                         : diagnostics.some(d => d.status === "warning")  ? "warning"
+                         : "optimal";
+
+            return {
+                id:        `TRX-${String(index + 1).padStart(3, "0")}`,
+                model:     pick(MODELS),
+                driver:    pick(DRIVERS),
+                plate:     plateRand(),
+                route:     pick(ROUTES),
+                speed:     randInt(0, 120),
+                fuelLevel: sensors.fuelLevel,
+                km:        randInt(10000, 500000),
+                status,
+                sensors,
+                diagnostics,
+            };
+        }
+
+        let fleet  = [];
+        let filter = "all";
+        let search = "";
+
+        function initFleet() {
+            fleet = Array.from({ length: 100 }, (_, i) => generateVehicle(i));
+        }
+
+        function labelStatus(s) {
+            return s === "optimal" ? "OK" : s === "warning" ? "ALERTA" : "CRÍTICO";
+        }
+
+        function getFiltered() {
+            return fleet.filter(v => {
+                if (filter !== "all" && v.status !== filter) return false;
+                if (!search) return true;
+                const s = search.toLowerCase();
+                return v.id.toLowerCase().includes(s)
+                    || v.driver.toLowerCase().includes(s)
+                    || v.plate.toLowerCase().includes(s)
+                    || v.route.toLowerCase().includes(s)
+                    || v.model.toLowerCase().includes(s);
+            });
+        }
+
+
+        function updateStats() {
+            const total    = fleet.length;
+            const optimal  = fleet.filter(v => v.status === "optimal").length;
+            const warning  = fleet.filter(v => v.status === "warning").length;
+            const critical = fleet.filter(v => v.status === "critical").length;
+            const avgSpeed = total ? Math.round(fleet.reduce((a, v) => a + v.speed, 0) / total) : 0;
+            const pct      = total ? Math.round((optimal / total) * 100) : 0;
+
+            document.getElementById("stat-total").textContent       = total;
+            document.getElementById("stat-optimal").textContent     = optimal;
+            document.getElementById("stat-warning").textContent     = warning;
+            document.getElementById("stat-critical").textContent    = critical;
+            document.getElementById("stat-speed").textContent       = avgSpeed;
+            document.getElementById("stat-optimal-pct").textContent = `${pct}% de la flota`;
+
+            document.querySelector('[data-filter="all"]').textContent      = `Todas (${total})`;
+            document.querySelector('[data-filter="optimal"]').textContent  = `Óptimas (${optimal})`;
+            document.querySelector('[data-filter="warning"]').textContent  = `Alerta (${warning})`;
+            document.querySelector('[data-filter="critical"]').textContent = `Críticas (${critical})`;
+        }
+
+        function renderGrid() {
+            const grid  = document.getElementById("fleet-grid");
+            const empty = document.getElementById("empty-state");
+            const items = getFiltered();
+
+            if (items.length === 0) {
+                grid.innerHTML = "";
+                empty.style.display = "block";
+                return;
+            }
+            empty.style.display = "none";
+
+            grid.innerHTML = items.map(v => `
+                <div class="vehicle-card ${v.status}" onclick="openUnit('${v.id}')">
+                    <div class="vehicle-header">
+                        <div class="vehicle-id">${v.id}</div>
+                        <div class="vehicle-status-badge ${v.status}">
+                            <span class="semaphore-dot ${v.status}"></span>
+                            ${labelStatus(v.status)}
+                        </div>
+                    </div>
+                    <div class="vehicle-info">
+                        <div class="info-row">
+                            <span class="info-label">Modelo</span>
+                            <span class="info-value">${v.model.split(" ").slice(0, 2).join(" ")}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Conductor</span>
+                            <span class="info-value">${v.driver.split(" ")[0]}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Ruta</span>
+                            <span class="info-value" style="font-size:.72rem">${v.route}</span>
+                        </div>
+                    </div>
+                    <div class="vehicle-metrics">
+                        <div class="metric">
+                            <div class="metric-value">${v.speed}</div>
+                            <div class="metric-label">km/h</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${Math.round(v.fuelLevel)}%</div>
+                            <div class="metric-label">Comb.</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${Math.round(v.sensors.temperature)}</div>
+                            <div class="metric-label">Temp °C</div>
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function render() { updateStats(); renderGrid(); }
+
+
+        function openUnit(id) {
+            window.location.href = `index_tercero.html?id=${encodeURIComponent(id)}`;
+        }
+
+        function setFilter(f) {
+            filter = f;
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.classList.remove("active", "green", "amber", "red");
+            });
+            const btn = document.querySelector(`[data-filter="${f}"]`);
+            btn.classList.add("active");
+            if (f === "optimal")  btn.classList.add("green");
+            if (f === "warning")  btn.classList.add("amber");
+            if (f === "critical") btn.classList.add("red");
+            renderGrid();
+        }
+
+        document.getElementById("search-input").addEventListener("input", e => {
+            search = e.target.value;
+            renderGrid();
         });
 
-        const m = datos.dMotor[12], t = datos.dTrans[12], f = datos.dFrenos[12];
-        document.getElementById('val_motor').innerText = m.toFixed(1) + "%";
-        document.getElementById('val_trans').innerText = t.toFixed(1) + "%";
-        document.getElementById('val_frenos').innerText = f.toFixed(1) + "%";
-        
-        colorear('sem_motor', m); colorear('sem_trans', t); colorear('sem_frenos', f);
 
-        let peor = Math.min(m, t, f);
-        let msg = "";
-        if (peor > 50) msg = "<b> IA: Operación Óptima</b><br>Todos los sistemas saludables. Aprobado para ruta.";
-        else if (peor > 20) msg = "<b> IA: Alerta Preventiva</b><br>Desgaste acelerado detectado. Requiere mantenimiento en 6 meses.";
-        else msg = "<b> IA: ¡ALERTA CRÍTICA!</b><br>Peligro de falla inminente. Reasignar unidad inmediatamente.";
-        
-        document.getElementById('agente_mensaje').innerHTML = msg;
-    }
-
-    // ==========================================
-    // LÓGICA MÓDULO 2 (SIMULADOR DE FLOTA AG)
-    // ==========================================
-    function ejecutarAlgoritmoGenetico() {
-        const grid = document.getElementById('grid_camiones');
-        grid.innerHTML = ""; // Limpiar grid anterior
-        document.getElementById('stats_flota').style.display = "flex";
-
-        let contVerdes = 0, contAmarillos = 0, contRojos = 0;
-        const rutas = ["Plana", "Mixta", "Montañosa"];
-        const cargas = ["Ligera", "Media", "Pesada"];
-
-        // Generar 100 camiones virtuales
-        for (let i = 1; i <= 100; i++) {
-            // Asignar parámetros operativos aleatorios (simulando telemetría de campo)
-            let randomKm = Math.floor(Math.random() * (1200 - 200 + 1)) + 200; 
-            let randomRuta = rutas[Math.floor(Math.random() * rutas.length)];
-            let randomCarga = cargas[Math.floor(Math.random() * cargas.length)];
-
-            // Evaluar el camión usando la misma matemática del gemelo digital
-            let resultado = calcularModeloFisico(randomKm, randomRuta, randomCarga);
-            let peorEstado = Math.min(resultado.dMotor[12], resultado.dTrans[12], resultado.dFrenos[12]);
-
-            // Clasificar según la salud
-            let claseEstado = "";
-            let etiqueta = "";
-            
-            if (peorEstado > 50) {
-                claseEstado = "estado-verde";
-                etiqueta = "A RUTA";
-                contVerdes++;
-            } else if (peorEstado > 20) {
-                claseEstado = "estado-amarillo";
-                etiqueta = "PREVENTIVO";
-                contAmarillos++;
-            } else {
-                claseEstado = "estado-rojo";
-                etiqueta = "TALLER";
-                contRojos++;
-            }
-
-            // Crear la tarjeta visual del camión
-            let card = document.createElement("div");
-            card.className = `camion-card ${claseEstado}`;
-            card.innerHTML = `
-                TRX-${String(i).padStart(3, '0')}<br>
-                <span style="font-size: 1rem; margin-top:3px;">${etiqueta}</span>
-                <span>Salud: ${peorEstado.toFixed(1)}%</span>
-            `;
-            
-            grid.appendChild(card);
+        function updateSync() {
+            const now = new Date();
+            document.getElementById("footer-sync").textContent =
+                `Flota sincronizada | Última actualización: ${now.toLocaleString("es-MX")} | TRAXION Fleet Control v2.0`;
         }
 
-        // Actualizar el Dashboard estadístico
-        document.getElementById('stat_verde').innerText = `🟢 Aprobados (Ruta): ${contVerdes}`;
-        document.getElementById('stat_amarillo').innerText = `🟡 Mantenimiento Preventivo: ${contAmarillos}`;
-        document.getElementById('stat_rojo').innerText = `🔴 Taller (Correctivo/Crítico): ${contRojos}`;
-    }
+        setInterval(() => {
+            fleet = fleet.map(v => {
+                if (Math.random() > 0.95) {
+                    return {
+                        ...v,
+                        speed:     randInt(0, 120),
+                        fuelLevel: Math.max(0, v.fuelLevel - rand(0, 0.5))
+                    };
+                }
+                return v;
+            });
+            render();
+            updateSync();
+        }, 3000);
 
-    window.onload = proyectarDesgaste;
-</script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add("visible");
+            });
+        }, { threshold: 0.12 });
+        document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+        initFleet();
+        render();
+        updateSync();
+        setInterval(updateSync, 1000);
+
+    </script>
 
 </body>
+
 </html>

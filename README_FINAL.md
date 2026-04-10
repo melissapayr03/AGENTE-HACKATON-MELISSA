@@ -20,8 +20,6 @@ Se hace uso de:
 
 #Autores
 Melissa Karely Payró Zenteno
-Paulo César Rodríguez Cuevas
-José Ángel Calero López
 
 
 #Creation date
