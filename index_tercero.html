@@ -9,7 +9,7 @@
 
     <!-- Chart.js para las gráficas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="tercero.css">
+    <link rel="stylesheet" href="tercero.css?v=2">
 
     <!--Fuentes importadas de Google APIs-->
     <style>
@@ -22,733 +22,408 @@
 <!-- CUERPO ENTERO DE LA PÁGINA -->
 <body>
 
-    <!-- ENCABEZADO -->
-    <nav>
-        <div class="container">
-            <div class="encabezado">
-                <a href="index.html" class="logo">
-                    <span class="logo-text">AUTO<span>ANALYZER</span> X</span>
-                </a>
-                
-                <div class="links">
-                    <a href="index.html">HOME</a>
-                    <a href="index.html">CONTACT</a>
-                    <a href="index.html">IMPACT</a>
-                </div>
-                
-                <div class="sistema-acceder">
-                    <div class="sistema-activo">
-                        <span class="boton-sistema"></span>
-                        SISTEMA ACTIVO
-                    </div>
-                    <a class="boton-acceder" href="index_secundario.html">
-                        REGRESAR
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- BODY PRINCIPAL -->
-    <section id="hero" class="main-body">
-
-        <div class="unit-detail">
-
-            <div class="detail-top-bar">
-                <div class="detail-top-inner">
-                    <a href="index_secundario.html" class="back-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M19 12H5M12 19l-7-7 7-7"/>
-                        </svg>
-                        Volver al panel
-                    </a>
-
-                    <div class="unit-title-section">
-                        <h1 id="unit-id-title">TRX-001</h1>
-                        <div id="unit-status-badge" class="unit-status-large optimal">
-                            <span id="unit-semaphore" style="width:10px;height:10px;border-radius:50%;display:inline-block;background:#10b981;box-shadow:0 0 8px rgba(16,185,129,.7)"></span>
-                            <span id="unit-status-text">OPERATIVO</span>
-                        </div>
-                    </div>
-
-                    <div id="detail-clock" style="color:#64748b;font-size:.8rem;font-family:'JetBrains Mono',monospace;"></div>
-                </div>
-            </div>
-
-            <div class="detail-content">
-                <div class="detail-grid">
-
-                    <div class="detail-panel">
-                        <div class="panel-title">
-                            <span class="icon">i</span>
-                            Información de la Unidad
-                        </div>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="field-label">ID Unidad</span>
-                                <span class="field-value" id="d-id">—</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="field-label">Placa</span>
-                                <span class="field-value" id="d-plate">—</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="field-label">Modelo</span>
-                                <span class="field-value" id="d-model">—</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="field-label">Conductor</span>
-                                <span class="field-value" id="d-driver">—</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="field-label">Ruta</span>
-                                <span class="field-value" id="d-route">—</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="field-label">Kilometraje</span>
-                                <span class="field-value" id="d-km">—</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="field-label">Velocidad</span>
-                                <span class="field-value" id="d-speed">—</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="field-label">Combustible</span>
-                                <span class="field-value" id="d-fuel">—</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-panel green-accent">
-                        <div class="panel-title">
-                            <span class="icon" style="background:rgba(16,185,129,.15);color:#34d399">D</span>
-                            Diagnóstico — Semáforos
-                        </div>
-                        <div class="diagnostics-grid" id="diagnostics-grid">
-                        </div>
-                    </div>
-
-                    <div class="detail-panel full-width-panel">
-                        <div class="panel-title">
-                            <span class="icon">G</span>
-                            Historial de Sensores — Últimas 24 Horas
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="chart-sensors"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="detail-panel">
-                        <div class="panel-title">
-                            <span class="icon">C</span>
-                            Nivel de Combustible
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="chart-fuel"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="detail-panel purple-accent">
-                        <div class="panel-title">
-                            <span class="icon" style="background:rgba(139,92,246,.15);color:#a78bfa">IA</span>
-                            Agente IA — Diagnóstico Predictivo
-                        </div>
-                        <div class="ai-message" id="ai-message">Analizando unidad...</div>
-                    </div>
-
-                    <div class="detail-panel full-width-panel amber-accent manual-input-section">
-                        <div class="panel-title">
-                            <span class="icon" style="background:rgba(245,158,11,.15);color:#fbbf24">E</span>
-                            Entrada Manual de Datos
-                        </div>
-                        <div class="input-grid" id="manual-input-grid">
-
-                        </div>
-                        <button class="recalculate-btn" onclick="recalcularDiagnostico()">
-                            Recalcular Diagnóstico
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="header">
-            <h1>INTEGRADO</h1>
-            <p>Algoritmos B50 | Regresión Histórica | Análisis de Vibración (FFT/Curtosis)</p>
-        </div>
-
-        <div class="dashboard-micro">
-            <div class="panel">
-                <h2>1. Parámetros de la Unidad</h2>
-                <div class="form-row">
-                    <div class="form-group"><label>Km Actuales:</label><input type="number" id="km_actuales" value="750000"></div>
-                    <div class="form-group"><label>Año Modelo:</label><input type="number" id="anio_modelo" value="2016"></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Reparaciones:</label><input type="number" id="reparaciones" value="4"></div>
-                    <div class="form-group"><label>Ruta Actual:</label>
-                        <select id="ruta">
-                            <option value="Plana">Plana</option>
-                            <option value="Mixta">Mixta</option>
-                            <option value="Montañosa" selected>Sierra</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Carga Promedio:</label>
-                        <select id="carga">
-                            <option value="Ligera">Ligera</option>
-                            <option value="Media">Media</option>
-                            <option value="Pesada" selected>Pesada</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn-principal" onclick="ejecutarGemelo()">2. Ejecutar Gemelo Digital</button>
-                
-                <div class="vibra-panel">
-                    <h3>Telemetría Transmisión (Sensor MEMS)</h3>
-                    <div class="vibra-stats">
-                        <div class="v-stat"><span class="v-lbl">Energía (RMS)</span><span class="v-val" id="val_rms">0.00 G</span></div>
-                        <div class="v-stat"><span class="v-lbl">Curtosis (K)</span><span class="v-val" id="val_kurt">0.00</span></div>
-                    </div>
-                    <div id="alerta_kurtosis" class="alerta-vibra">⚠️ ¡ALERTA! Curtosis alta: Posible fractura en rodamiento</div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2>3. Diagnóstico de Salud (12 Meses)</h2>
-                <div class="panel-semaforos">
-                    <div class="indicador"><div id="sem_motor" class="semaforo-mini"></div><span class="etiqueta-comp">Motor</span><span id="val_motor" class="valor-comp">--%</span></div>
-                    <div class="indicador"><div id="sem_trans" class="semaforo-mini"></div><span class="etiqueta-comp">Trans.</span><span id="val_trans" class="valor-comp">--%</span></div>
-                    <div class="indicador"><div id="sem_frenos" class="semaforo-mini"></div><span class="etiqueta-comp">Frenos</span><span id="val_frenos" class="valor-comp">--%</span></div>
-                </div>
-                <div class="modelos-grid">
-                    <div class="caja-modelo">
-                        <h3>Modelo Físico B50</h3>
-                        <span id="res_matematico" style="color:#2980b9;">--%</span>
-                    </div>
-                    <div class="caja-modelo">
-                        <h3>Regresión Estadística</h3>
-                        <span id="res_estadistico" style="color:#8e44ad;">--%</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2>4. Agente IA (Dictamen de Ensamble)</h2>
-                <div class="chat-container">
-                    <div class="chat-history" id="chat_history">
-                        <div class="mensaje msg-ia"><b>🤖 IA Traxión:</b> Sistemas en línea. Evaluaremos Salud Matemática, Regresión Histórica y Curtosis de Vibración para evitar fallas catastróficas.</div>
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="user_input" placeholder="Genera reporte y orden de trabajo...">
-                        <button onclick="enviarMensajeIA()">Enviar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="dashboard">
-            <div class="panel">
-                <h2>Proyección de Degradación</h2>
-                <canvas id="graficaDesgaste" height="110"></canvas>
-                <div class="agente-box" id="agente_mensaje"><i>Analizando unidad...</i></div>
-            </div>
-        </div>
-
-        <div class="flota-container panel">
-            <h2 style="color:#10b981">Algoritmo Genético: Asignación de Flota Inteligente (Knapsack Problem)</h2>
-            <p style="color:#94a3b8;font-size:.85rem;margin-bottom:1rem">Simula la evaluación de 100 unidades en tiempo real. El algoritmo maximiza la disponibilidad priorizando unidades sanas (Verdes) a rutas exigentes, retiene preventivamente las unidades en riesgo medio (Amarillas) y bloquea unidades críticas (Rojas).</p>
-            
-            <button class="btn-ag" onclick="ejecutarAlgoritmoGenetico()">🧬 Ejecutar Simulación de Flota (100 Unidades)</button>
-
-            <div class="stats-flota" id="stats_flota" style="display:none;">
-                <div id="stat_verde">🟢 Aprobados (Ruta): 0</div>
-                <div id="stat_amarillo">🟡 Mantenimiento Preventivo: 0</div>
-                <div id="stat_rojo">🔴 Taller (Correctivo/Crítico): 0</div>
-            </div>
-
-            <div class="grid-camiones" id="grid_camiones"></div>
-        </div>
-
-
-        <!-- FOOTER -->
-        <footer>
-            <div class="container">
-                <div class="footer-grid">
+    <div class="unit-detail">
     
-                    <div>
-                        <div class="footer-brand-text">
-                            <svg width="22" height="22" viewBox="0 0 24 24" color="var(--blue)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                            AUTO<span>ANALYZER </span>X 
+                <div class="detail-top-bar">
+                    <div class="detail-top-inner">
+                        <a href="index_secundario.html" class="back-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                            </svg>
+                            Volver al panel
+                        </a>
+    
+                        <div class="unit-title-section">
+                            <h1 id="unit-id-title">TRX-001</h1>
+                            <div id="unit-status-badge" class="unit-status-large optimal">
+                                <span id="unit-semaphore" style="width:10px;height:10px;border-radius:50%;display:inline-block;background:#10b981;box-shadow:0 0 8px rgba(16,185,129,.7)"></span>
+                                <span id="unit-status-text">OPERATIVO</span>
+                            </div>
                         </div>
-                        <p class="footer-brand-desc">
-                            Agente con IA experta en mantenimiento predictivo para flotas.
-                        </p>  
-                    </div>
-
-                    <div>
-                        <div class="footer-col-title">Navegación</div>
-                        <ul class="footer-links">
-                            <li><a href="index.html"><svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>HOME</a></li>
-                            <li><a href="index.html"><svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>IMPACT</a></li>
-                            <li><a href="index.html"><svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>COSTO DEL "DESPUÉS"</a></li>
-                            <li><a href="index.html"><svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>OPTIMIZA</a></li>
-                            <li><a href="#contactofinal"><svg width="10" height="10" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>CONTACTO</a></li>
-                        </ul>
-                    </div>
-                        
-                    <div>
-                        <div class="footer-col-title">Contacto y Legal</div>
-                        <ul class="footer-links" style="margin-bottom:1.5rem;">
-                            <li><a href="#">TÉRMINOS Y CONDICIONES</a></li>
-                            <li><a href="#">POLÍTICA DE PRIVACIDAD</a></li>
-                        </ul>
-                        <div class="footer-contact-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" color="var(--blue)"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            +52 983-165-9377
-                        </div>
-                        <div class="footer-email">autoanalyzerx@traxion.com</div>
+    
+                        <div id="detail-clock" style="color:#64748b;font-size:.8rem;font-family:'JetBrains Mono',monospace;"></div>
                     </div>
                 </div>
-                    
-                <div class="footer-bottom">
-                    <p class="footer-copy">Copyright &copy;2026 AutoAnalyzerX. All Rights Reserved.</p>
+    
+                <div class="detail-content">
+                    <div class="detail-grid">
+    
+                        <div class="detail-panel">
+                            <div class="panel-title">
+                                <span class="icon">i</span>
+                                Información de la Unidad
+                            </div>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="field-label">ID Unidad</span>
+                                    <span class="field-value" id="d-id">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="field-label">Placa</span>
+                                    <span class="field-value" id="d-plate">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="field-label">Modelo</span>
+                                    <span class="field-value" id="d-model">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="field-label">Conductor</span>
+                                    <span class="field-value" id="d-driver">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="field-label">Ruta</span>
+                                    <span class="field-value" id="d-route">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="field-label">Kilometraje</span>
+                                    <span class="field-value" id="d-km">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="field-label">Velocidad</span>
+                                    <span class="field-value" id="d-speed">—</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="field-label">Combustible</span>
+                                    <span class="field-value" id="d-fuel">—</span>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="detail-panel green-accent">
+                            <div class="panel-title">
+                                <span class="icon" style="background:rgba(16,185,129,.15);color:#34d399">D</span>
+                                Diagnóstico — Semáforos
+                            </div>
+                            <div class="diagnostics-grid" id="diagnostics-grid">
+                            </div>
+                        </div>
+    
+                        <div class="detail-panel full-width-panel">
+                            <div class="panel-title">
+                                <span class="icon">G</span>
+                                Historial de Sensores — Últimas 24 Horas
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-sensors"></canvas>
+                            </div>
+                        </div>
+    
+                        <div class="detail-panel">
+                            <div class="panel-title">
+                                <span class="icon">C</span>
+                                Nivel de Combustible
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chart-fuel"></canvas>
+                            </div>
+                        </div>
+    
+                        <div class="detail-panel purple-accent">
+                            <div class="panel-title">
+                                <span class="icon" style="background:rgba(139,92,246,.15);color:#a78bfa">IA</span>
+                                Agente IA — Diagnóstico Predictivo
+                            </div>
+                            <div class="ai-message" id="ai-message">Analizando unidad...</div>
+                        </div>
+    
+                        <div class="detail-panel full-width-panel amber-accent manual-input-section">
+                            <div class="panel-title">
+                                <span class="icon" style="background:rgba(245,158,11,.15);color:#fbbf24">E</span>
+                                Entrada Manual de Datos
+                            </div>
+                            <div class="input-grid" id="manual-input-grid">
+    
+                            </div>
+                            <button class="recalculate-btn" onclick="recalcularDiagnostico()">
+                                Recalcular Diagnóstico
+                            </button>
+                        </div>
+    
+                    </div>
                 </div>
             </div>
-        </footer>
 
-
-        <script>
-
-            const MODELS  = ["Kenworth W990","Peterbilt 579","Freightliner 122SD","Volvo VNL 860","International LT","Mack Anthem","Kenworth T680","Peterbilt 389","Volvo VNR","Freightliner Cascadia"];
-            const DRIVERS = ["Carlos Martinez","Maria Lopez","Jose Garcia","Ana Rodriguez","Luis Hernandez","Sofia Torres","Pedro Ramirez","Carmen Flores","Miguel Sanchez","Elena Morales","Roberto Diaz","Patricia Vega","Fernando Castro","Laura Jimenez","David Mendez"];
-            const ROUTES  = ["CDMX - Monterrey","Guadalajara - Tijuana","Monterrey - Laredo","Puebla - Veracruz","CDMX - Manzanillo","Hermosillo - Nogales","Saltillo - Laredo","Merida - Cancun","Toluca - Morelia","Pachuca - Tulancingo"];
-
-            function rand(min, max)    { return Math.random() * (max - min) + min; }
-            function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
-            function pick(arr)         { return arr[Math.floor(Math.random() * arr.length)]; }
-
-            function plateRand() {
-                const L = "ABCDEFGHJKLMNPRSTUVWXYZ";
-                const l = () => L[randInt(0, L.length - 1)];
-                return `${l()}${l()}-${randInt(100,999)}-${l()}${l()}`;
-            }
-
-            function sensorStatus(value, warn, crit, inv = false) {
-                if (inv) return value <= crit ? "critical" : value <= warn ? "warning" : "optimal";
-                return value >= crit ? "critical" : value >= warn ? "warning" : "optimal";
-            }
-
-            function buildDiagnostics(sensors) {
-                return [
-                    { name:"Temperatura Motor",  value:sensors.temperature,    unit:"C",    status:sensorStatus(sensors.temperature,   95,110),          min:60,  max:130  },
-                    { name:"Vibración",          value:sensors.vibration,      unit:"mm/s", status:sensorStatus(sensors.vibration,     5,7),             min:0,   max:10   },
-                    { name:"Presión Neumáticos", value:sensors.pressure,       unit:"PSI",  status:sensorStatus(sensors.pressure,      28,26,true),      min:20,  max:50   },
-                    { name:"RPM Motor",          value:sensors.rpm,            unit:"RPM",  status:sensorStatus(sensors.rpm,           1800,2100),       min:0,   max:2500 },
-                    { name:"Nivel Combustible",  value:sensors.fuelLevel,      unit:"%",    status:sensorStatus(sensors.fuelLevel,     25,15,true),      min:0,   max:100  },
-                    { name:"Presión Aceite",     value:sensors.oilPressure,    unit:"PSI",  status:sensorStatus(sensors.oilPressure,   30,22,true),      min:0,   max:100  },
-                    { name:"Voltaje Batería",    value:sensors.batteryVoltage, unit:"V",    status:sensorStatus(sensors.batteryVoltage,12.2,11.8,true),  min:10,  max:16   },
-                    { name:"Estado Llantas",     value:sensors.tireCondition,  unit:"%",    status:sensorStatus(sensors.tireCondition, 50,30,true),      min:0,   max:100  },
-                    { name:"Desgaste Frenos",    value:sensors.brakeWear,      unit:"%",    status:sensorStatus(sensors.brakeWear,     50,30,true),      min:0,   max:100  },
-                    { name:"Carga Motor",        value:sensors.engineLoad,     unit:"%",    status:sensorStatus(sensors.engineLoad,    80,90),           min:0,   max:100  },
-                ];
-            }
-
-            function generateVehicle(id) {
-                const seed = id.split("").reduce((a,c) => a + c.charCodeAt(0), 0);
-                const pseudoRand = (min, max) => {
-                    const x = Math.sin(seed * 9301 + 49297) * 233280;
-                    const r = x - Math.floor(x);
-                    return min + r * (max - min);
-                };
-
-                const sensors = {
-                    temperature:    parseFloat(rand(65,125).toFixed(2)),
-                    vibration:      parseFloat(rand(1,9).toFixed(2)),
-                    pressure:       parseFloat(rand(22,45).toFixed(2)),
-                    rpm:            parseFloat(rand(800,2200).toFixed(2)),
-                    fuelLevel:      parseFloat(rand(8,100).toFixed(2)),
-                    oilPressure:    parseFloat(rand(15,80).toFixed(2)),
-                    batteryVoltage: parseFloat(rand(11.2,14.8).toFixed(2)),
-                    tireCondition:  parseFloat(rand(20,100).toFixed(2)),
-                    brakeWear:      parseFloat(rand(20,100).toFixed(2)),
-                    engineLoad:     parseFloat(rand(30,100).toFixed(2)),
-                };
-
-                const diagnostics = buildDiagnostics(sensors);
-                const status = diagnostics.some(d => d.status === "critical") ? "critical"
-                             : diagnostics.some(d => d.status === "warning")  ? "warning"
-                             : "optimal";
-
-                return {
-                    id, status, sensors, diagnostics,
-                    model:  pick(MODELS),
-                    driver: pick(DRIVERS),
-                    plate:  plateRand(),
-                    route:  pick(ROUTES),
-                    speed:  randInt(0, 120),
-                    fuelLevel: sensors.fuelLevel,
-                    km:     randInt(10000, 500000),
-                };
-            }
-
-            function generateHistoryData(hours) {
-                return Array.from({ length: hours }, (_, i) => ({
-                    time:        `${String(hours - 1 - i).padStart(2,"0")}h`,
-                    temperature: parseFloat(rand(70,120).toFixed(1)),
-                    vibration:   parseFloat(rand(1,8).toFixed(2)),
-                    rpm:         parseFloat(rand(900,2100).toFixed(0)),
-                    fuel:        parseFloat(rand(20,95).toFixed(1)),
-                }));
-            }
-
-            function getAIDiagnostic(vehicle) {
-                const critical = vehicle.diagnostics.filter(d => d.status === "critical");
-                const warning  = vehicle.diagnostics.filter(d => d.status === "warning");
-
-                if (critical.length > 0) {
-                    return `⚠️ ALERTA CRÍTICA — Unidad ${vehicle.id}\n\nSensores críticos detectados: ${critical.map(d=>d.name).join(", ")}.\n\nSe recomienda detención inmediata del vehículo para inspección técnica.\nRiesgo de falla mecánica en operación continua.`;
-                } else if (warning.length > 0) {
-                    return `⚡ ATENCIÓN — Unidad ${vehicle.id}\n\nParámetros fuera de rango óptimo: ${warning.map(d=>d.name).join(", ")}.\n\nSe recomienda revisión en próximo punto de control.\nMonitoreo continuo activado.`;
-                } else {
-                    return `✅ OPERATIVO — Unidad ${vehicle.id}\n\nTodos los sensores dentro de parámetros normales.\n\nUnidad operando correctamente. Próximo mantenimiento preventivo programado.\nSistema IA sin alertas activas.`;
+    <script>
+    
+                const MODELS  = ["Kenworth W990","Peterbilt 579","Freightliner 122SD","Volvo VNL 860","International LT","Mack Anthem","Kenworth T680","Peterbilt 389","Volvo VNR","Freightliner Cascadia"];
+                const DRIVERS = ["Carlos Martinez","Maria Lopez","Jose Garcia","Ana Rodriguez","Luis Hernandez","Sofia Torres","Pedro Ramirez","Carmen Flores","Miguel Sanchez","Elena Morales","Roberto Diaz","Patricia Vega","Fernando Castro","Laura Jimenez","David Mendez"];
+                const ROUTES  = ["CDMX - Monterrey","Guadalajara - Tijuana","Monterrey - Laredo","Puebla - Veracruz","CDMX - Manzanillo","Hermosillo - Nogales","Saltillo - Laredo","Merida - Cancun","Toluca - Morelia","Pachuca - Tulancingo"];
+    
+                function rand(min, max)    { return Math.random() * (max - min) + min; }
+                function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+                function pick(arr)         { return arr[Math.floor(Math.random() * arr.length)]; }
+    
+                function plateRand() {
+                    const L = "ABCDEFGHJKLMNPRSTUVWXYZ";
+                    const l = () => L[randInt(0, L.length - 1)];
+                    return `${l()}${l()}-${randInt(100,999)}-${l()}${l()}`;
                 }
-            }
-
-            let currentVehicle  = null;
-            let manualInputs    = {};
-            let sensorChartRef  = null;
-            let fuelChartRef    = null;
-
-            const CHART_OPTS = {
-                backgroundColor: "rgba(15,23,42,.95)",
-                borderColor:     "rgba(59,130,246,.3)",
-                borderRadius:    "8px",
-                color:           "#e2e8f0",
-                font:            { size: 11 },
-            };
-
-
-            function renderUnitInfo(v) {
-                document.getElementById("unit-id-title").textContent = v.id;
-                document.getElementById("d-id").textContent     = v.id;
-                document.getElementById("d-plate").textContent   = v.plate;
-                document.getElementById("d-model").textContent   = v.model;
-                document.getElementById("d-driver").textContent  = v.driver;
-                document.getElementById("d-route").textContent   = v.route;
-                document.getElementById("d-km").textContent      = v.km.toLocaleString() + " km";
-                document.getElementById("d-speed").textContent   = v.speed + " km/h";
-                document.getElementById("d-fuel").textContent    = Math.round(v.fuelLevel) + "%";
-
-                const badge  = document.getElementById("unit-status-badge");
-                const semph  = document.getElementById("unit-semaphore");
-                const txt    = document.getElementById("unit-status-text");
-
-                badge.className = `unit-status-large ${v.status}`;
-                txt.textContent = v.status === "optimal" ? "OPERATIVO" : v.status === "warning" ? "EN ALERTA" : "CRÍTICO";
-
-                const sColors = { optimal:"#10b981", warning:"#f59e0b", critical:"#ef4444" };
-                const sGlows  = { optimal:"rgba(16,185,129,.7)", warning:"rgba(245,158,11,.7)", critical:"rgba(239,68,68,.7)" };
-                semph.style.background = sColors[v.status];
-                semph.style.boxShadow  = `0 0 8px ${sGlows[v.status]}`;
-            }
-
-            function renderDiagnostics(diagnostics) {
-                const grid = document.getElementById("diagnostics-grid");
-                grid.innerHTML = diagnostics.map(d => {
-                    const pct = Math.min(100, Math.max(0, ((d.value - d.min) / (d.max - d.min)) * 100));
-                    return `
-                        <div class="diag-item">
-                            <div class="diag-semaphore ${d.status}"></div>
-                            <div class="diag-info">
-                                <div class="diag-name">${d.name}</div>
-                                <div class="diag-value">${d.value} <span style="font-size:.7rem;color:#64748b">${d.unit}</span></div>
+    
+                function sensorStatus(value, warn, crit, inv = false) {
+                    if (inv) return value <= crit ? "critical" : value <= warn ? "warning" : "optimal";
+                    return value >= crit ? "critical" : value >= warn ? "warning" : "optimal";
+                }
+    
+                function buildDiagnostics(sensors) {
+                    return [
+                        { name:"Temperatura Motor",  value:sensors.temperature,    unit:"C",    status:sensorStatus(sensors.temperature,   95,110),          min:60,  max:130  },
+                        { name:"Vibración",          value:sensors.vibration,      unit:"mm/s", status:sensorStatus(sensors.vibration,     5,7),             min:0,   max:10   },
+                        { name:"Presión Neumáticos", value:sensors.pressure,       unit:"PSI",  status:sensorStatus(sensors.pressure,      28,26,true),      min:20,  max:50   },
+                        { name:"RPM Motor",          value:sensors.rpm,            unit:"RPM",  status:sensorStatus(sensors.rpm,           1800,2100),       min:0,   max:2500 },
+                        { name:"Nivel Combustible",  value:sensors.fuelLevel,      unit:"%",    status:sensorStatus(sensors.fuelLevel,     25,15,true),      min:0,   max:100  },
+                        { name:"Presión Aceite",     value:sensors.oilPressure,    unit:"PSI",  status:sensorStatus(sensors.oilPressure,   30,22,true),      min:0,   max:100  },
+                        { name:"Voltaje Batería",    value:sensors.batteryVoltage, unit:"V",    status:sensorStatus(sensors.batteryVoltage,12.2,11.8,true),  min:10,  max:16   },
+                        { name:"Estado Llantas",     value:sensors.tireCondition,  unit:"%",    status:sensorStatus(sensors.tireCondition, 50,30,true),      min:0,   max:100  },
+                        { name:"Desgaste Frenos",    value:sensors.brakeWear,      unit:"%",    status:sensorStatus(sensors.brakeWear,     50,30,true),      min:0,   max:100  },
+                        { name:"Carga Motor",        value:sensors.engineLoad,     unit:"%",    status:sensorStatus(sensors.engineLoad,    80,90),           min:0,   max:100  },
+                    ];
+                }
+    
+                function generateVehicle(id) {
+                    const seed = id.split("").reduce((a,c) => a + c.charCodeAt(0), 0);
+                    const pseudoRand = (min, max) => {
+                        const x = Math.sin(seed * 9301 + 49297) * 233280;
+                        const r = x - Math.floor(x);
+                        return min + r * (max - min);
+                    };
+    
+                    const sensors = {
+                        temperature:    parseFloat(rand(65,125).toFixed(2)),
+                        vibration:      parseFloat(rand(1,9).toFixed(2)),
+                        pressure:       parseFloat(rand(22,45).toFixed(2)),
+                        rpm:            parseFloat(rand(800,2200).toFixed(2)),
+                        fuelLevel:      parseFloat(rand(8,100).toFixed(2)),
+                        oilPressure:    parseFloat(rand(15,80).toFixed(2)),
+                        batteryVoltage: parseFloat(rand(11.2,14.8).toFixed(2)),
+                        tireCondition:  parseFloat(rand(20,100).toFixed(2)),
+                        brakeWear:      parseFloat(rand(20,100).toFixed(2)),
+                        engineLoad:     parseFloat(rand(30,100).toFixed(2)),
+                    };
+    
+                    const diagnostics = buildDiagnostics(sensors);
+                    const status = diagnostics.some(d => d.status === "critical") ? "critical"
+                                 : diagnostics.some(d => d.status === "warning")  ? "warning"
+                                 : "optimal";
+    
+                    return {
+                        id, status, sensors, diagnostics,
+                        model:  pick(MODELS),
+                        driver: pick(DRIVERS),
+                        plate:  plateRand(),
+                        route:  pick(ROUTES),
+                        speed:  randInt(0, 120),
+                        fuelLevel: sensors.fuelLevel,
+                        km:     randInt(10000, 500000),
+                    };
+                }
+    
+                function generateHistoryData(hours) {
+                    return Array.from({ length: hours }, (_, i) => ({
+                        time:        `${String(hours - 1 - i).padStart(2,"0")}h`,
+                        temperature: parseFloat(rand(70,120).toFixed(1)),
+                        vibration:   parseFloat(rand(1,8).toFixed(2)),
+                        rpm:         parseFloat(rand(900,2100).toFixed(0)),
+                        fuel:        parseFloat(rand(20,95).toFixed(1)),
+                    }));
+                }
+    
+                function getAIDiagnostic(vehicle) {
+                    const critical = vehicle.diagnostics.filter(d => d.status === "critical");
+                    const warning  = vehicle.diagnostics.filter(d => d.status === "warning");
+    
+                    if (critical.length > 0) {
+                        return `⚠️ ALERTA CRÍTICA — Unidad ${vehicle.id}\n\nSensores críticos detectados: ${critical.map(d=>d.name).join(", ")}.\n\nSe recomienda detención inmediata del vehículo para inspección técnica.\nRiesgo de falla mecánica en operación continua.`;
+                    } else if (warning.length > 0) {
+                        return `⚡ ATENCIÓN — Unidad ${vehicle.id}\n\nParámetros fuera de rango óptimo: ${warning.map(d=>d.name).join(", ")}.\n\nSe recomienda revisión en próximo punto de control.\nMonitoreo continuo activado.`;
+                    } else {
+                        return `✅ OPERATIVO — Unidad ${vehicle.id}\n\nTodos los sensores dentro de parámetros normales.\n\nUnidad operando correctamente. Próximo mantenimiento preventivo programado.\nSistema IA sin alertas activas.`;
+                    }
+                }
+    
+                let currentVehicle  = null;
+                let manualInputs    = {};
+                let sensorChartRef  = null;
+                let fuelChartRef    = null;
+    
+                const CHART_OPTS = {
+                    backgroundColor: "rgba(15,23,42,.95)",
+                    borderColor:     "rgba(59,130,246,.3)",
+                    borderRadius:    "8px",
+                    color:           "#e2e8f0",
+                    font:            { size: 11 },
+                };
+    
+    
+                function renderUnitInfo(v) {
+                    document.getElementById("unit-id-title").textContent = v.id;
+                    document.getElementById("d-id").textContent     = v.id;
+                    document.getElementById("d-plate").textContent   = v.plate;
+                    document.getElementById("d-model").textContent   = v.model;
+                    document.getElementById("d-driver").textContent  = v.driver;
+                    document.getElementById("d-route").textContent   = v.route;
+                    document.getElementById("d-km").textContent      = v.km.toLocaleString() + " km";
+                    document.getElementById("d-speed").textContent   = v.speed + " km/h";
+                    document.getElementById("d-fuel").textContent    = Math.round(v.fuelLevel) + "%";
+    
+                    const badge  = document.getElementById("unit-status-badge");
+                    const semph  = document.getElementById("unit-semaphore");
+                    const txt    = document.getElementById("unit-status-text");
+    
+                    badge.className = `unit-status-large ${v.status}`;
+                    txt.textContent = v.status === "optimal" ? "OPERATIVO" : v.status === "warning" ? "EN ALERTA" : "CRÍTICO";
+    
+                    const sColors = { optimal:"#10b981", warning:"#f59e0b", critical:"#ef4444" };
+                    const sGlows  = { optimal:"rgba(16,185,129,.7)", warning:"rgba(245,158,11,.7)", critical:"rgba(239,68,68,.7)" };
+                    semph.style.background = sColors[v.status];
+                    semph.style.boxShadow  = `0 0 8px ${sGlows[v.status]}`;
+                }
+    
+                function renderDiagnostics(diagnostics) {
+                    const grid = document.getElementById("diagnostics-grid");
+                    grid.innerHTML = diagnostics.map(d => {
+                        const pct = Math.min(100, Math.max(0, ((d.value - d.min) / (d.max - d.min)) * 100));
+                        return `
+                            <div class="diag-item">
+                                <div class="diag-semaphore ${d.status}"></div>
+                                <div class="diag-info">
+                                    <div class="diag-name">${d.name}</div>
+                                    <div class="diag-value">${d.value} <span style="font-size:.7rem;color:#64748b">${d.unit}</span></div>
+                                </div>
+                                <div class="diag-bar-container">
+                                    <div class="diag-bar ${d.status}" style="width:${pct}%"></div>
+                                </div>
                             </div>
-                            <div class="diag-bar-container">
-                                <div class="diag-bar ${d.status}" style="width:${pct}%"></div>
-                            </div>
+                        `;
+                    }).join("");
+                }
+    
+                function renderManualInputs() {
+                    const fields = [
+                        { key:"temperature",    label:"Temperatura Motor",  unit:"C"    },
+                        { key:"vibration",      label:"Vibración",          unit:"mm/s" },
+                        { key:"pressure",       label:"Presión Neumáticos", unit:"PSI"  },
+                        { key:"rpm",            label:"RPM Motor",          unit:"RPM"  },
+                        { key:"fuelLevel",      label:"Combustible",        unit:"%"    },
+                        { key:"oilPressure",    label:"Presión Aceite",     unit:"PSI"  },
+                        { key:"batteryVoltage", label:"Voltaje Batería",    unit:"V"    },
+                        { key:"tireCondition",  label:"Estado Llantas",     unit:"%"    },
+                        { key:"brakeWear",      label:"Desgaste Frenos",    unit:"%"    },
+                        { key:"engineLoad",     label:"Carga Motor",        unit:"%"    },
+                    ];
+    
+                    document.getElementById("manual-input-grid").innerHTML = fields.map(f => `
+                        <div class="input-field">
+                            <label>${f.label} (${f.unit})</label>
+                            <input type="number" step="0.01"
+                                   placeholder="${currentVehicle ? currentVehicle.sensors[f.key] : ""}"
+                                   oninput="manualInputs['${f.key}'] = parseFloat(this.value) || null" />
                         </div>
-                    `;
-                }).join("");
-            }
-
-            function renderManualInputs() {
-                const fields = [
-                    { key:"temperature",    label:"Temperatura Motor",  unit:"C"    },
-                    { key:"vibration",      label:"Vibración",          unit:"mm/s" },
-                    { key:"pressure",       label:"Presión Neumáticos", unit:"PSI"  },
-                    { key:"rpm",            label:"RPM Motor",          unit:"RPM"  },
-                    { key:"fuelLevel",      label:"Combustible",        unit:"%"    },
-                    { key:"oilPressure",    label:"Presión Aceite",     unit:"PSI"  },
-                    { key:"batteryVoltage", label:"Voltaje Batería",    unit:"V"    },
-                    { key:"tireCondition",  label:"Estado Llantas",     unit:"%"    },
-                    { key:"brakeWear",      label:"Desgaste Frenos",    unit:"%"    },
-                    { key:"engineLoad",     label:"Carga Motor",        unit:"%"    },
-                ];
-
-                document.getElementById("manual-input-grid").innerHTML = fields.map(f => `
-                    <div class="input-field">
-                        <label>${f.label} (${f.unit})</label>
-                        <input type="number" step="0.01"
-                               placeholder="${currentVehicle ? currentVehicle.sensors[f.key] : ""}"
-                               oninput="manualInputs['${f.key}'] = parseFloat(this.value) || null" />
-                    </div>
-                `).join("");
-            }
-
-            function renderCharts(historyData) {
-                const labels = historyData.map(h => h.time);
-                const commonOptions = {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: "#94a3b8", font: { size: 11 } } },
-                        tooltip: {
-                            backgroundColor: "rgba(15,23,42,.95)",
-                            borderColor: "rgba(59,130,246,.3)",
-                            borderWidth: 1,
-                            titleColor: "#e2e8f0",
-                            bodyColor: "#94a3b8",
+                    `).join("");
+                }
+    
+                function renderCharts(historyData) {
+                    const labels = historyData.map(h => h.time);
+                    const commonOptions = {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: "#94a3b8", font: { size: 11 } } },
+                            tooltip: {
+                                backgroundColor: "rgba(15,23,42,.95)",
+                                borderColor: "rgba(59,130,246,.3)",
+                                borderWidth: 1,
+                                titleColor: "#e2e8f0",
+                                bodyColor: "#94a3b8",
+                            }
+                        },
+                        scales: {
+                            x: { ticks: { color: "#475569", font: { size: 10 } }, grid: { color: "rgba(59,130,246,.07)" } },
+                            y: { ticks: { color: "#475569", font: { size: 10 } }, grid: { color: "rgba(59,130,246,.07)" } },
                         }
-                    },
-                    scales: {
-                        x: { ticks: { color: "#475569", font: { size: 10 } }, grid: { color: "rgba(59,130,246,.07)" } },
-                        y: { ticks: { color: "#475569", font: { size: 10 } }, grid: { color: "rgba(59,130,246,.07)" } },
-                    }
-                };
-
-                if (sensorChartRef) sensorChartRef.destroy();
-                sensorChartRef = new Chart(document.getElementById("chart-sensors"), {
-                    type: "line",
-                    data: {
-                        labels,
-                        datasets: [
-                            { label:"Temp (°C)",   data: historyData.map(h=>h.temperature), borderColor:"#ef4444", backgroundColor:"rgba(239,68,68,.07)",  borderWidth:2, pointRadius:0, fill:true, tension:0.3 },
-                            { label:"Vibr. (mm/s)",data: historyData.map(h=>h.vibration),   borderColor:"#f59e0b", backgroundColor:"rgba(245,158,11,.05)", borderWidth:2, pointRadius:0, fill:false, tension:0.3 },
-                            { label:"RPM (÷100)",  data: historyData.map(h=>h.rpm/100),     borderColor:"#3b82f6", backgroundColor:"rgba(59,130,246,.05)",  borderWidth:2, pointRadius:0, fill:false, tension:0.3 },
-                        ]
-                    },
-                    options: commonOptions
-                });
-
-                if (fuelChartRef) fuelChartRef.destroy();
-                fuelChartRef = new Chart(document.getElementById("chart-fuel"), {
-                    type: "line",
-                    data: {
-                        labels,
-                        datasets: [{
-                            label:"Combustible (%)",
-                            data: historyData.map(h=>h.fuel),
-                            borderColor:"#10b981",
-                            backgroundColor:"rgba(16,185,129,.12)",
-                            borderWidth:2, pointRadius:0, fill:true, tension:0.3
-                        }]
-                    },
-                    options: { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, min:0, max:100 } } }
-                });
-            }
-
-
-            function recalcularDiagnostico() {
-                if (!currentVehicle) return;
-                const newSensors = { ...currentVehicle.sensors };
-                Object.keys(manualInputs).forEach(k => {
-                    if (manualInputs[k] !== null) newSensors[k] = manualInputs[k];
-                });
-                const newDiag = buildDiagnostics(newSensors);
-                const newStatus = newDiag.some(d=>d.status==="critical") ? "critical"
-                                : newDiag.some(d=>d.status==="warning")  ? "warning"
-                                : "optimal";
-                currentVehicle = { ...currentVehicle, sensors: newSensors, diagnostics: newDiag, status: newStatus };
-                renderUnitInfo(currentVehicle);
-                renderDiagnostics(newDiag);
-                document.getElementById("ai-message").textContent = getAIDiagnostic(currentVehicle);
-                manualInputs = {};
-                renderManualInputs();
-            }
-
-            function updateClock() {
-                document.getElementById("detail-clock").textContent =
-                    new Date().toLocaleTimeString("es-MX");
-            }
-
-            function getStoredVehicle(unitId) {
-                const selectedVehicle = JSON.parse(localStorage.getItem("autoanalyzer_selected_vehicle") || "null");
-                if (selectedVehicle && selectedVehicle.id === unitId) return selectedVehicle;
-
-                const storedFleet = JSON.parse(localStorage.getItem("autoanalyzer_fleet") || "[]");
-                return storedFleet.find(v => v.id === unitId) || null;
-            }
-
-            function initUnitDetail() {
-                const params = new URLSearchParams(window.location.search);
-                const unitId = params.get("id") || "TRX-001";
-
-                currentVehicle = getStoredVehicle(unitId) || generateVehicle(unitId);
-                const historyData = generateHistoryData(24);
-
-                renderUnitInfo(currentVehicle);
-                renderDiagnostics(currentVehicle.diagnostics);
-                renderManualInputs();
-                if (typeof Chart !== "undefined") renderCharts(historyData);
-                document.getElementById("ai-message").textContent = getAIDiagnostic(currentVehicle);
-            }
-
-            updateClock();
-            setInterval(updateClock, 1000);
-
-            window.addEventListener("DOMContentLoaded", initUnitDetail);
-
-        </script>
-
-
-        <script>
-
-            let chartInstance = null;
-
-            function ejecutarGemelo() {
-                proyectarDesgaste();
-                const rms  = (Math.random() * 0.8 + 0.2).toFixed(2);
-                const kurt = (Math.random() * 10).toFixed(2);
-                
-                document.getElementById("val_rms").textContent  = rms + " G";
-                document.getElementById("val_kurt").textContent = kurt;
-                document.getElementById("alerta_kurtosis").style.display = parseFloat(kurt) > 4 ? "block" : "none";
-
-                const pesoKm = parseInt(document.getElementById("km_actuales").value) / 10000;
-                const pesoRep = parseInt(document.getElementById("reparaciones").value) * 3;
-                const resEstadistico = Math.max(0, Math.min(100, 100 - pesoKm - pesoRep + Math.random() * 10)).toFixed(1);
-                document.getElementById("res_estadistico").textContent = resEstadistico + "%";
-                document.getElementById("res_matematico").textContent  = (parseFloat(resEstadistico) * 0.95 + Math.random() * 5).toFixed(1) + "%";
-            }
-
-            function enviarMensajeIA() {
-                const input = document.getElementById("user_input");
-                const msg = input.value.trim();
-                if (!msg) return;
-                const history = document.getElementById("chat_history");
-                history.innerHTML += `<div class="mensaje msg-user">${msg}</div>`;
-                const respuestas = [
-                    "🤖 IA Traxión: Analizando parámetros operativos... Recomiendo mantenimiento preventivo en los próximos 15 días.",
-                    "🤖 IA Traxión: Generando orden de trabajo OT-2026-AUTO. Sistema de frenos requiere revisión prioritaria.",
-                    "🤖 IA Traxión: Basado en datos de vibración y kilometraje, el riesgo de falla crítica es del 23% en los próximos 30 días.",
-                    "🤖 IA Traxión: Unidad dentro de parámetros aceptables. Se recomienda cambio de aceite en próximo servicio.",
-                ];
-                setTimeout(() => {
-                    const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)];
-                    history.innerHTML += `<div class="mensaje msg-ia"><b>${respuesta}</b></div>`;
-                    history.scrollTop = history.scrollHeight;
-                }, 600);
-                input.value = "";
-            }
-
-            function calcularModeloFisico(kmDiarios, ruta, carga) {
-                const vMotor = 1600000, vTrans = 800000, vFrenos = 350000;
-                let fMotor = 1.0, fTrans = 1.0, fFrenos = 1.0;
-                
-                if (ruta === "Montañosa") { fFrenos *= 1.8; fTrans *= 1.35; } else if (ruta === "Mixta") { fFrenos *= 1.25; fTrans *= 1.15; }
-                if (carga === "Pesada") { fMotor *= 1.35; fTrans *= 1.4; fFrenos *= 1.3; } else if (carga === "Media") { fMotor *= 1.1; fTrans *= 1.1; fFrenos *= 1.1; } else if (carga === "Ligera") { fMotor *= 0.85; fTrans *= 0.85; fFrenos *= 0.85; }
-
-                let dMotor = [100], dTrans = [100], dFrenos = [100];
-                for (let i = 1; i <= 12; i++) {
-                    dMotor.push(Math.max(0, 100 - (((kmDiarios * 30) * fMotor * i) / vMotor * 100)));
-                    dTrans.push(Math.max(0, 100 - (((kmDiarios * 30) * fTrans * i) / vTrans * 100)));
-                    dFrenos.push(Math.max(0, 100 - (((kmDiarios * 30) * fFrenos * i) / vFrenos * 100)));
+                    };
+    
+                    if (sensorChartRef) sensorChartRef.destroy();
+                    sensorChartRef = new Chart(document.getElementById("chart-sensors"), {
+                        type: "line",
+                        data: {
+                            labels,
+                            datasets: [
+                                { label:"Temp (°C)",   data: historyData.map(h=>h.temperature), borderColor:"#ef4444", backgroundColor:"rgba(239,68,68,.07)",  borderWidth:2, pointRadius:0, fill:true, tension:0.3 },
+                                { label:"Vibr. (mm/s)",data: historyData.map(h=>h.vibration),   borderColor:"#f59e0b", backgroundColor:"rgba(245,158,11,.05)", borderWidth:2, pointRadius:0, fill:false, tension:0.3 },
+                                { label:"RPM (÷100)",  data: historyData.map(h=>h.rpm/100),     borderColor:"#3b82f6", backgroundColor:"rgba(59,130,246,.05)",  borderWidth:2, pointRadius:0, fill:false, tension:0.3 },
+                            ]
+                        },
+                        options: commonOptions
+                    });
+    
+                    if (fuelChartRef) fuelChartRef.destroy();
+                    fuelChartRef = new Chart(document.getElementById("chart-fuel"), {
+                        type: "line",
+                        data: {
+                            labels,
+                            datasets: [{
+                                label:"Combustible (%)",
+                                data: historyData.map(h=>h.fuel),
+                                borderColor:"#10b981",
+                                backgroundColor:"rgba(16,185,129,.12)",
+                                borderWidth:2, pointRadius:0, fill:true, tension:0.3
+                            }]
+                        },
+                        options: { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, min:0, max:100 } } }
+                    });
                 }
-                return { dMotor, dTrans, dFrenos };
-            }
-
-            function colorear(id, val) {
-                let div = document.getElementById(id);
-                if (val > 50) { div.style.background = "#2ecc71"; div.style.boxShadow = "0 0 15px #2ecc71"; }
-                else if (val > 20) { div.style.background = "#f1c40f"; div.style.boxShadow = "0 0 15px #f1c40f"; }
-                else { div.style.background = "#e74c3c"; div.style.boxShadow = "0 0 15px #e74c3c"; }
-            }
-
-            function proyectarDesgaste() {
-                const km   = parseFloat(document.getElementById('km_actuales').value) / 365;
-                const ruta = document.getElementById('ruta').value;
-                const carga = document.getElementById('carga').value;
-                const datos = calcularModeloFisico(km, ruta, carga);
-
-                if (chartInstance) chartInstance.destroy();
-                chartInstance = new Chart(document.getElementById('graficaDesgaste').getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: ['Hoy', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12'],
-                        datasets: [
-                            { label: 'Motor',        data: datos.dMotor,  borderColor: '#3498db', fill: false, tension: 0.2 },
-                            { label: 'Transmisión',  data: datos.dTrans,  borderColor: '#9b59b6', fill: false, tension: 0.2 },
-                            { label: 'Frenos',       data: datos.dFrenos, borderColor: '#e74c3c', fill: false, tension: 0.2 }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: { y: { min: 0, max: 100, ticks: { color: "#94a3b8" }, grid: { color: "rgba(59,130,246,.07)" } }, x: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(59,130,246,.07)" } } },
-                        plugins: { legend: { labels: { color: "#94a3b8" } } }
-                    }
-                });
-
-                const m = datos.dMotor[12], t = datos.dTrans[12], f = datos.dFrenos[12];
-                document.getElementById('val_motor').innerText  = m.toFixed(1) + "%";
-                document.getElementById('val_trans').innerText  = t.toFixed(1) + "%";
-                document.getElementById('val_frenos').innerText = f.toFixed(1) + "%";
-                colorear('sem_motor', m); colorear('sem_trans', t); colorear('sem_frenos', f);
-
-                let peor = Math.min(m, t, f);
-                let msg = "";
-                if (peor > 50) msg = "<b>IA: Operación Óptima</b><br>Todos los sistemas saludables. Aprobado para ruta.";
-                else if (peor > 20) msg = "<b>IA: Alerta Preventiva</b><br>Desgaste acelerado detectado. Requiere mantenimiento en 6 meses.";
-                else msg = "<b>IA: ¡ALERTA CRÍTICA!</b><br>Peligro de falla inminente. Reasignar unidad inmediatamente.";
-                document.getElementById('agente_mensaje').innerHTML = msg;
-            }
-
-            function ejecutarAlgoritmoGenetico() {
-                const grid = document.getElementById('grid_camiones');
-                grid.innerHTML = "";
-                document.getElementById('stats_flota').style.display = "flex";
-                let contVerdes = 0, contAmarillos = 0, contRojos = 0;
-                const rutas = ["Plana", "Mixta", "Montañosa"];
-                const cargas = ["Ligera", "Media", "Pesada"];
-
-                for (let i = 1; i <= 100; i++) {
-                    let randomKm   = Math.floor(Math.random() * (1200 - 200 + 1)) + 200;
-                    let randomRuta = rutas[Math.floor(Math.random() * rutas.length)];
-                    let randomCarga = cargas[Math.floor(Math.random() * cargas.length)];
-                    let resultado  = calcularModeloFisico(randomKm, randomRuta, randomCarga);
-                    let peorEstado = Math.min(resultado.dMotor[12], resultado.dTrans[12], resultado.dFrenos[12]);
-                    let claseEstado = "", etiqueta = "";
-
-                    if (peorEstado > 50) { claseEstado = "estado-verde";    etiqueta = "A RUTA";     contVerdes++; }
-                    else if (peorEstado > 20) { claseEstado = "estado-amarillo"; etiqueta = "PREVENTIVO"; contAmarillos++; }
-                    else { claseEstado = "estado-rojo";     etiqueta = "TALLER";     contRojos++; }
-
-                    let card = document.createElement("div");
-                    card.className = `camion-card ${claseEstado}`;
-                    card.innerHTML = `TRX-${String(i).padStart(3,'0')}<br><span style="font-size:1rem;margin-top:3px">${etiqueta}</span><span>Salud: ${peorEstado.toFixed(1)}%</span>`;
-                    grid.appendChild(card);
+    
+    
+                function recalcularDiagnostico() {
+                    if (!currentVehicle) return;
+                    const newSensors = { ...currentVehicle.sensors };
+                    Object.keys(manualInputs).forEach(k => {
+                        if (manualInputs[k] !== null) newSensors[k] = manualInputs[k];
+                    });
+                    const newDiag = buildDiagnostics(newSensors);
+                    const newStatus = newDiag.some(d=>d.status==="critical") ? "critical"
+                                    : newDiag.some(d=>d.status==="warning")  ? "warning"
+                                    : "optimal";
+                    currentVehicle = { ...currentVehicle, sensors: newSensors, diagnostics: newDiag, status: newStatus };
+                    renderUnitInfo(currentVehicle);
+                    renderDiagnostics(newDiag);
+                    document.getElementById("ai-message").textContent = getAIDiagnostic(currentVehicle);
+                    manualInputs = {};
+                    renderManualInputs();
                 }
-
-                document.getElementById('stat_verde').innerText    = `🟢 Aprobados (Ruta): ${contVerdes}`;
-                document.getElementById('stat_amarillo').innerText = `🟡 Mantenimiento Preventivo: ${contAmarillos}`;
-                document.getElementById('stat_rojo').innerText     = `🔴 Taller (Correctivo/Crítico): ${contRojos}`;
-            }
-
-            window.addEventListener("DOMContentLoaded", proyectarDesgaste);
-
-        </script>
-
-        <script>
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('visible');
-                });
-            }, { threshold: 0.12 });
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        </script>
-
-    </section>
+    
+                function updateClock() {
+                    document.getElementById("detail-clock").textContent =
+                        new Date().toLocaleTimeString("es-MX");
+                }
+    
+                function getStoredVehicle(unitId) {
+                    const selectedVehicle = JSON.parse(localStorage.getItem("autoanalyzer_selected_vehicle") || "null");
+                    if (selectedVehicle && selectedVehicle.id === unitId) return selectedVehicle;
+    
+                    const storedFleet = JSON.parse(localStorage.getItem("autoanalyzer_fleet") || "[]");
+                    return storedFleet.find(v => v.id === unitId) || null;
+                }
+    
+                function initUnitDetail() {
+                    const params = new URLSearchParams(window.location.search);
+                    const unitId = params.get("id") || "TRX-001";
+    
+                    currentVehicle = getStoredVehicle(unitId) || generateVehicle(unitId);
+                    const historyData = generateHistoryData(24);
+    
+                    renderUnitInfo(currentVehicle);
+                    renderDiagnostics(currentVehicle.diagnostics);
+                    renderManualInputs();
+                    if (typeof Chart !== "undefined") renderCharts(historyData);
+                    document.getElementById("ai-message").textContent = getAIDiagnostic(currentVehicle);
+                }
+    
+                updateClock();
+                setInterval(updateClock, 1000);
+    
+                window.addEventListener("DOMContentLoaded", initUnitDetail);
+    
+            </script>
 
 </body>
 
