@@ -573,17 +573,25 @@
                     new Date().toLocaleTimeString("es-MX");
             }
 
+            function getStoredVehicle(unitId) {
+                const selectedVehicle = JSON.parse(localStorage.getItem("autoanalyzer_selected_vehicle") || "null");
+                if (selectedVehicle && selectedVehicle.id === unitId) return selectedVehicle;
+
+                const storedFleet = JSON.parse(localStorage.getItem("autoanalyzer_fleet") || "[]");
+                return storedFleet.find(v => v.id === unitId) || null;
+            }
+
             function initUnitDetail() {
                 const params = new URLSearchParams(window.location.search);
-                const unitId = params.get("index_secundario.html") || "TRX-001";
+                const unitId = params.get("id") || "TRX-001";
 
-                currentVehicle = generateVehicle(unitId);
+                currentVehicle = getStoredVehicle(unitId) || generateVehicle(unitId);
                 const historyData = generateHistoryData(24);
 
                 renderUnitInfo(currentVehicle);
                 renderDiagnostics(currentVehicle.diagnostics);
                 renderManualInputs();
-                renderCharts(historyData);
+                if (typeof Chart !== "undefined") renderCharts(historyData);
                 document.getElementById("ai-message").textContent = getAIDiagnostic(currentVehicle);
             }
 
@@ -591,11 +599,6 @@
             setInterval(updateClock, 1000);
 
             window.addEventListener("DOMContentLoaded", initUnitDetail);
-
-            window.onload = () => {
-                initUnitDetail();
-                setInterval(updateClock, 1000);
-            }
 
         </script>
 
@@ -732,7 +735,7 @@
                 document.getElementById('stat_rojo').innerText     = `🔴 Taller (Correctivo/Crítico): ${contRojos}`;
             }
 
-            window.onload = proyectarDesgaste;
+            window.addEventListener("DOMContentLoaded", proyectarDesgaste);
 
         </script>
 
@@ -744,45 +747,6 @@
             }, { threshold: 0.12 });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         </script>
-
-        <script>
-            // 1. Obtener el ID de la URL
-            const params = new URLSearchParams(window.location.search);
-            const unitId = params.get('id');
-            
-            // 2. Recuperar la flota del LocalStorage
-            const fleet = JSON.parse(localStorage.getItem('autoanalyzer_fleet'));
-            
-            // 3. Buscar el camión específico
-            const vehicle = fleet.find(v => v.id === unitId);
-            
-            if (vehicle) {
-                // 4. Inyectar los datos en el HTML
-                document.getElementById('unit-id-title').textContent = vehicle.id;
-                document.getElementById('d-id').textContent = vehicle.id;
-                document.getElementById('d-plate').textContent = vehicle.plate;
-                document.getElementById('d-model').textContent = vehicle.model;
-                document.getElementById('d-driver').textContent = vehicle.driver;
-                document.getElementById('d-route').textContent = vehicle.route;
-                document.getElementById('d-km').textContent = vehicle.km.toLocaleString() + " km";
-                document.getElementById('d-speed').textContent = vehicle.speed + " km/h";
-                document.getElementById('d-fuel').textContent = Math.round(vehicle.fuelLevel) + "%";
-                
-                // Actualizar estado visual
-                const statusBadge = document.getElementById('unit-status-badge');
-                statusBadge.className = `unit-status-large ${vehicle.status}`;
-                document.getElementById('unit-status-text').textContent = 
-                    vehicle.status === 'optimal' ? 'OPERATIVO' : 
-                    vehicle.status === 'warning' ? 'ALERTA' : 'CRÍTICO';
-                    // Aquí deberías llamar a tus funciones de gráficas usando vehicle.sensors
-            } else {
-                alert("Unidad no encontrada");
-                window.location.href = 'index_secundario.html';
-            }
-        </script>
-
-    
-</script>
 
     </section>
 

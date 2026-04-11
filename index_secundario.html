@@ -285,6 +285,7 @@
 
         function initFleet() {
             fleet = Array.from({ length: 100 }, (_, i) => generateVehicle(i));
+            localStorage.setItem("autoanalyzer_fleet", JSON.stringify(fleet));
         }
 
         function labelStatus(s) {
@@ -383,6 +384,10 @@
 
 
         function openUnit(id) {
+            const selectedVehicle = fleet.find(v => v.id === id);
+            if (selectedVehicle) {
+                localStorage.setItem("autoanalyzer_selected_vehicle", JSON.stringify(selectedVehicle));
+            }
             window.location.href = `index_tercero.html?id=${encodeURIComponent(id)}`;
         }
 
@@ -422,6 +427,7 @@
                 }
                 return v;
             });
+            localStorage.setItem("autoanalyzer_fleet", JSON.stringify(fleet));
             render();
             updateSync();
         }, 3000);
