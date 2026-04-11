@@ -9,7 +9,7 @@
 
     <!-- Chart.js para las gráficas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="tercero.css?v=2">
+    <link rel="stylesheet" href="tercero.css?v=3">
 
     <!--Fuentes importadas de Google APIs-->
     <style>
@@ -321,23 +321,83 @@
                     `).join("");
                 }
     
+                const chartHoverLinePlugin = {
+                    id: "chartHoverLine",
+                    afterDraw(chart) {
+                        if (!chart.tooltip || !chart.tooltip._active || !chart.tooltip._active.length) return;
+                        const ctx = chart.ctx;
+                        const activePoint = chart.tooltip._active[0];
+                        const x = activePoint.element.x;
+                        const topY = chart.chartArea.top;
+                        const bottomY = chart.chartArea.bottom;
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.moveTo(x, topY);
+                        ctx.lineTo(x, bottomY);
+                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = "rgba(96,165,250,0.28)";
+                        ctx.setLineDash([4, 4]);
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                };
+
                 function renderCharts(historyData) {
                     const labels = historyData.map(h => h.time);
                     const commonOptions = {
-                        responsive: true, maintainAspectRatio: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: "index",
+                            intersect: false,
+                        },
+                        hover: {
+                            mode: "index",
+                            intersect: false,
+                        },
                         plugins: {
-                            legend: { labels: { color: "#94a3b8", font: { size: 11 } } },
+                            legend: {
+                                position: "top",
+                                labels: {
+                                    color: "#94a3b8",
+                                    font: { size: 11 },
+                                    usePointStyle: false,
+                                    boxWidth: 42,
+                                    boxHeight: 10,
+                                    padding: 16,
+                                }
+                            },
                             tooltip: {
                                 backgroundColor: "rgba(15,23,42,.95)",
                                 borderColor: "rgba(59,130,246,.3)",
                                 borderWidth: 1,
+                                cornerRadius: 8,
+                                padding: 12,
+                                displayColors: true,
+                                boxWidth: 10,
+                                boxHeight: 10,
                                 titleColor: "#e2e8f0",
                                 bodyColor: "#94a3b8",
+                                titleFont: { size: 12, weight: "700" },
+                                bodyFont: { size: 12 },
+                                callbacks: {
+                                    title(items) {
+                                        return `Hora: ${items[0].label}`;
+                                    }
+                                }
                             }
                         },
                         scales: {
-                            x: { ticks: { color: "#475569", font: { size: 10 } }, grid: { color: "rgba(59,130,246,.07)" } },
-                            y: { ticks: { color: "#475569", font: { size: 10 } }, grid: { color: "rgba(59,130,246,.07)" } },
+                            x: {
+                                ticks: { color: "#475569", font: { size: 11 }, maxRotation: 0 },
+                                grid: { color: "rgba(59,130,246,.10)", borderDash: [3, 3] },
+                                border: { color: "rgba(59,130,246,.12)" }
+                            },
+                            y: {
+                                ticks: { color: "#475569", font: { size: 11 } },
+                                grid: { color: "rgba(59,130,246,.10)", borderDash: [3, 3] },
+                                border: { color: "rgba(59,130,246,.12)" }
+                            },
                         }
                     };
     
@@ -347,12 +407,13 @@
                         data: {
                             labels,
                             datasets: [
-                                { label:"Temp (°C)",   data: historyData.map(h=>h.temperature), borderColor:"#ef4444", backgroundColor:"rgba(239,68,68,.07)",  borderWidth:2, pointRadius:0, fill:true, tension:0.3 },
-                                { label:"Vibr. (mm/s)",data: historyData.map(h=>h.vibration),   borderColor:"#f59e0b", backgroundColor:"rgba(245,158,11,.05)", borderWidth:2, pointRadius:0, fill:false, tension:0.3 },
-                                { label:"RPM (÷100)",  data: historyData.map(h=>h.rpm/100),     borderColor:"#3b82f6", backgroundColor:"rgba(59,130,246,.05)",  borderWidth:2, pointRadius:0, fill:false, tension:0.3 },
+                                { label:"Temp (°C)",    data: historyData.map(h=>h.temperature), borderColor:"#ef4444", backgroundColor:"rgba(239,68,68,.07)",  borderWidth:2, pointRadius:0, pointHoverRadius:5, pointHitRadius:24, pointBackgroundColor:"#ef4444", pointHoverBorderWidth:2, pointHoverBorderColor:"#fee2e2", fill:false, tension:0.35, cubicInterpolationMode:"monotone" },
+                                { label:"Vibr. (mm/s)", data: historyData.map(h=>h.vibration),   borderColor:"#f59e0b", backgroundColor:"rgba(245,158,11,.05)", borderWidth:2, pointRadius:0, pointHoverRadius:5, pointHitRadius:24, pointBackgroundColor:"#f59e0b", pointHoverBorderWidth:2, pointHoverBorderColor:"#fef3c7", fill:false, tension:0.35, cubicInterpolationMode:"monotone" },
+                                { label:"RPM",          data: historyData.map(h=>h.rpm),         borderColor:"#3b82f6", backgroundColor:"rgba(59,130,246,.05)",  borderWidth:2, pointRadius:0, pointHoverRadius:5, pointHitRadius:24, pointBackgroundColor:"#3b82f6", pointHoverBorderWidth:2, pointHoverBorderColor:"#dbeafe", fill:false, tension:0.35, cubicInterpolationMode:"monotone" },
                             ]
                         },
-                        options: commonOptions
+                        options: commonOptions,
+                        plugins: [chartHoverLinePlugin]
                     });
     
                     if (fuelChartRef) fuelChartRef.destroy();
@@ -364,11 +425,21 @@
                                 label:"Combustible (%)",
                                 data: historyData.map(h=>h.fuel),
                                 borderColor:"#10b981",
-                                backgroundColor:"rgba(16,185,129,.12)",
-                                borderWidth:2, pointRadius:0, fill:true, tension:0.3
+                                backgroundColor:"rgba(16,185,129,.15)",
+                                borderWidth:2,
+                                pointRadius:0,
+                                pointHoverRadius:5,
+                                pointHitRadius:24,
+                                pointBackgroundColor:"#10b981",
+                                pointHoverBorderWidth:2,
+                                pointHoverBorderColor:"#d1fae5",
+                                fill:true,
+                                tension:0.35,
+                                cubicInterpolationMode:"monotone"
                             }]
                         },
-                        options: { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, min:0, max:100 } } }
+                        options: { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, min:0, max:100 } } },
+                        plugins: [chartHoverLinePlugin]
                     });
                 }
     

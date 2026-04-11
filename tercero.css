@@ -473,6 +473,12 @@ nav {
 
 .chart-container {
   width: 100%; height: 260px;
+  cursor: crosshair;
+  position: relative;
+}
+
+.chart-container canvas {
+  display: block;
 }
 
 .manual-input-section { margin-top: 0; }
